@@ -76,51 +76,52 @@ if (!window.hasContentScriptLoaded) {
     isSaving = true;
 
     chrome.storage.sync.get(['apiKey', 'savePath'], (result) => {
-      if (!result.apiKey) {
-        showBubble('API Key or Save Path not set. Please set it in the extension options.');
-        isSaving = false;
-        return;
-      }
-
-      let savePath = result.savePath;
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const formattedDate = `${year}${month}${day}${hours}${minutes}`;
-
-      const filename = savePath ? 
-        `${savePath}/${noteTitle ? formattedDate + ' ' + noteTitle : formattedDate}.md` : 
-        `${formattedDate}.md`;
-
-      fetch(`https://127.0.0.1:27124/vault/${encodeURIComponent(filename)}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/markdown',
-          'Authorization': `Bearer ${result.apiKey}`
-        },
-        body: noteContent
-      }).then(response => {
-        isSaving = false;
-        if (response.ok) {
-          showBubble('Note saved!');
-          inputBox.style.display = 'none';
-          document.getElementById('note-title').value = '';
-          document.getElementById('note-content').value = '';
-        } else {
-          response.text().then(text => {
-            console.error('Response text:', text);
-            showBubble('Failed to save note.');
-          });
+        if (!result.apiKey) {
+          showBubble('API Key or Save Path not set. Please set it in the extension options.');
+          isSaving = false;
+          return;
         }
-      }).catch(error => {
-        isSaving = false;
-        console.error('Error:', error);
-        showBubble('Error: ' + error.message);
-      });
-    });
+      
+        let savePath = result.savePath;
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const formattedDate = `${year}${month}${day}${hours}${minutes}`;
+      
+        const noteTitle = document.getElementById('note-title').value.trim();
+        const filename = savePath ? 
+          `${savePath}/${noteTitle ? formattedDate + ' ' + noteTitle : formattedDate}.md` : 
+          `${formattedDate}${noteTitle ? ' ' + noteTitle : ''}.md`;
+      
+        fetch(`https://127.0.0.1:27124/vault/${encodeURIComponent(filename)}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/markdown',
+            'Authorization': `Bearer ${result.apiKey}`
+          },
+          body: noteContent
+        }).then(response => {
+          isSaving = false;
+          if (response.ok) {
+            showBubble('Note saved!');
+            inputBox.style.display = 'none';
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+          } else {
+            response.text().then(text => {
+              console.error('Response text:', text);
+              showBubble('Failed to save note.');
+            });
+          }
+        }).catch(error => {
+          isSaving = false;
+          console.error('Error:', error);
+          showBubble('Error: ' + error.message);
+        });
+      });      
   });
 
   document.addEventListener('click', function(event) {
