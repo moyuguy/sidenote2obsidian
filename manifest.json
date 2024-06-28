@@ -1,0 +1,31 @@
+{
+    "manifest_version": 3,
+    "name": "Simple Obsidian Note Extension",
+    "version": "1.0",
+    "description": "A simple Chrome extension for quickly recording ideas on any webpage and sending them to Obsidian.",
+    "permissions": ["storage"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["images/ball.png", "images/icon16.png", "images/icon48.png", "images/icon128.png"],
+        "matches": ["<all_urls>"]
+      }
+    ],
+    "icons": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  }
+  
