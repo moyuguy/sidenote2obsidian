@@ -43,10 +43,9 @@ if (!window.hasContentScriptLoaded) {
     <input type="text" id="note-title" style="width: 100%; margin-bottom: 10px; border: 1px solid #ccc; padding: 5px;">
     <label for="note-content" style="font-weight: bold;">Note Content:</label>
     <textarea id="note-content" rows="10" style="width: 100%; border: 1px solid #ccc; padding: 5px;"></textarea>
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
     <button id="save-note">Save</button>
+    <button id="clear-note" style="background-color: white; border: 0 red; color: red;">Clear</button>
     <p style="font-size: 12px; color: #888; margin: 0;">Cmd+Enter to submit, ESC to exit</p>
-  </div>
   `;
   document.body.appendChild(inputBox);
   console.log("Input box created");
@@ -70,6 +69,12 @@ if (!window.hasContentScriptLoaded) {
 
   const saveButton = document.getElementById('save-note');
   saveButton.addEventListener('click', saveNoteHandler);
+
+  const clearButton = document.getElementById('clear-note');
+  clearButton.addEventListener('click', function() {
+    document.getElementById('note-title').value = '';
+    document.getElementById('note-content').value = '';
+  });
 
   // cmd+enter 提交
   document.getElementById('note-content').addEventListener('keydown', function(event) {
