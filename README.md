@@ -2,6 +2,9 @@
 一个简单的 Chrome 插件，快速在任何网页记录想法并发送到 Obsidian。
 需要搭配社区插件使用：[Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) 以通过安全的Local REST API 进行笔记的自动化处理。
 
+<img width="1571" alt="image" src="https://github.com/moyuguy/sidenote2obsidian/assets/5793687/0fcb66cb-5311-4671-a5f1-0e58575ed253">
+
+
 ### 安装方式
 1. 在 Obsidian 社区插件中安装 Local REST API。
 2. 下载本插件到本地并解压，建议将文件夹放置在一个不会随意删除的位置。
