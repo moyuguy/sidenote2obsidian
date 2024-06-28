@@ -235,7 +235,7 @@ if (!window.hasContentScriptLoaded) {
   }
 
   chrome.storage.sync.get(['shortcutKey'], (result) => {
-    const shortcutKey = result.shortcutKey || 'Ctrl+O';
+    const shortcutKey = result.shortcutKey || 'Ctrl+o';
   
     document.addEventListener('keydown', function(event) {
       const keys = shortcutKey.split('+');

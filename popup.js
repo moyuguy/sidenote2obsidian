@@ -16,6 +16,12 @@ document.getElementById('save').addEventListener('click', () => {
   chrome.storage.sync.set({ apiKey: apiKey, savePath: savePath, shortcutKey: shortcutKey }, () => {
     showBubble('API Key, Save Path, and Shortcut Key saved');
     errorMessage.textContent = '';
+
+    // 保存后刷新当前选项卡，让配置生效
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      chrome.tabs.reload(tabs[0].id);
+    });
+
     window.close(); // 关闭popup窗口
   });
 });
@@ -24,7 +30,7 @@ document.getElementById('reset').addEventListener('click', () => {
   chrome.storage.sync.clear(() => {
     document.getElementById('api-key').value = '';
     document.getElementById('save-path').value = '';
-    document.getElementById('shortcut-key').value = 'Ctrl+O';
+    document.getElementById('shortcut-key').value = 'Ctrl+o';
     showBubble('Settings cleared');
   });
 });
