@@ -148,7 +148,6 @@ if (!window.hasContentScriptLoaded) {
       inputBox.style.display = 'none';
     }
   });
-  
 
   function saveNoteHandler() {
     if (isSaving) return;
@@ -210,12 +209,31 @@ if (!window.hasContentScriptLoaded) {
     });
   }
 
+  chrome.storage.local.get(['noteTitle', 'noteContent'], function(result) {
+    if (result.noteTitle) {
+      document.getElementById('note-title').value = result.noteTitle;
+    }
+    if (result.noteContent) {
+      document.getElementById('note-content').value = result.noteContent;
+    }
+  });
+
   document.addEventListener('click', function(event) {
     if (!inputBox.contains(event.target) && !ball.contains(event.target)) {
       inputBox.style.display = 'none';
     }
   });
 
+  document.getElementById('note-title').addEventListener('input', function() {
+    const noteTitle = document.getElementById('note-title').value;
+    chrome.storage.local.set({ noteTitle });
+  });
+  
+  document.getElementById('note-content').addEventListener('input', function() {
+    const noteContent = document.getElementById('note-content').value;
+    chrome.storage.local.set({ noteContent });
+  });
+  
   function showBubble(message) {
     const bubble = document.createElement('div');
     bubble.style.cssText = `
