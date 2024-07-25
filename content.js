@@ -1,7 +1,9 @@
-console.log("Content script loaded");
-
-if (!window.hasContentScriptLoaded) {
+if (window.hasContentScriptLoaded) {
+  console.log("Content script already loaded. Skipping initialization.");
+} else {
   window.hasContentScriptLoaded = true;
+
+  console.log("Content script loaded");
 
   // 创建一个容器元素
   const container = document.createElement('div');
@@ -11,6 +13,12 @@ if (!window.hasContentScriptLoaded) {
   // 创建Shadow DOM
   const shadow = container.attachShadow({mode: 'open'});
   const shadowRoot = shadow.getRootNode();
+
+  shadowRoot.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      inputBox.style.display = 'none';
+    }
+  });
 
   // 创建样式元素
   const style = document.createElement('style');
@@ -61,6 +69,12 @@ if (!window.hasContentScriptLoaded) {
       box-sizing: border-box;
       font-family: inherit;
       font-size: inherit;
+    }
+    #input-box input:focus,
+    #input-box textarea:focus {
+      outline: none;
+      border-color: rgb(124 58 237);
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
     }
     #input-box button {
       padding: 8px 15px;
@@ -165,6 +179,8 @@ if (!window.hasContentScriptLoaded) {
 
   const inputBox = document.createElement('div');
   inputBox.id = 'input-box';
+  inputBox.tabIndex = -1; // 添加这行
+  inputBox.style.display = 'none'; 
   inputBox.innerHTML = `    
     <label for="note-title">Note Title (optional):</label>
     <input type="text" id="note-title">
@@ -192,21 +208,23 @@ if (!window.hasContentScriptLoaded) {
       let savePath = result.savePath;
       
       checkServerAndApiKey(apiKey, () => {
-        inputBox.style.display = inputBox.style.display === 'none' ? 'block' : 'none';
-        if (inputBox.style.display === 'block') {
+        if (inputBox.style.display === 'none' || inputBox.style.display === '') {
+          inputBox.style.display = 'block';
           updateInputBoxPosition();
           loadSavedNote(); // 加载保存的笔记内容
           shadow.getElementById('note-title').focus();
+        } else {
+          inputBox.style.display = 'none';
         }
-        console.log("Input box toggled");
+        console.log("Input box toggled, current display:", inputBox.style.display);
       });
     });
   });
 
   // 为输入框添加点击事件监听器，阻止事件冒泡
-inputBox.addEventListener('click', function(event) {
-  event.stopPropagation();
-});
+  inputBox.addEventListener('click', function(event) {
+    event.stopPropagation();
+  });
 
   let isSaving = false;
 
@@ -230,74 +248,67 @@ inputBox.addEventListener('click', function(event) {
     }
   });
 
-  // 按下esc隐藏窗口
-  document.addEventListener('keydown', function(event) {
-    const noteTitle = shadowRoot.getElementById('note-title');
-    const noteContent = shadowRoot.getElementById('note-content');
-    if (event.key === 'Escape' && (document.activeElement === noteTitle || document.activeElement === noteContent)) {
-      inputBox.style.display = 'none';
-    }
-  });
-
   function saveNoteHandler() {
     if (isSaving) return;
-
+  
     const noteTitle = shadow.getElementById('note-title').value.trim();
     const noteContent = shadow.getElementById('note-content').value;
+  
     if (!noteContent) {
       showBubble('Please enter note content.');
       return;
     }
-
+  
     isSaving = true;
-
-    chrome.storage.sync.get(['apiKey', 'savePath'], (result) => {
-      if (!result.apiKey) {
-        showBubble('API Key or Save Path not set. Please set it in the extension options.');
-        isSaving = false;
-        return;
-      }
-
-      let savePath = result.savePath;
-      const now = new Date();
-      const formattedDate = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
-
-
-      const filename = savePath ? 
-        `${savePath}/${noteTitle ? formattedDate + ' ' + noteTitle : formattedDate}.md` : 
-        `${formattedDate}${noteTitle ? ' ' + noteTitle : ''}.md`;
-
-      fetch(`https://127.0.0.1:27124/vault/${encodeURIComponent(filename)}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/markdown',
-          'Authorization': `Bearer ${result.apiKey}`
-        },
-        body: noteContent
-      }).then(response => {
-        isSaving = false;
-        if (response.ok) {
-          showBubble('Note saved!');
-          inputBox.style.display = 'none';
-
-          // 清除本地存储的笔记内容
-          chrome.storage.local.remove(['noteTitle', 'noteContent', 'lastSaved'], function() {
-            console.log('Saved note content cleared from local storage');
-          });
-
-          // 清空输入框
-          shadow.getElementById('note-title').value = '';
-          shadow.getElementById('note-content').value = '';
-        } else {
-          response.text().then(text => {
-            console.error('Response text:', text);
-            showBubble('Failed to save note.');
-          });
+  
+    chrome.runtime.sendMessage({action: "getCurrentTabInfo"}, function(response) {
+      const pageUrl = response.url;
+      const pageTitle = response.title;
+  
+      const sourceInfo = `\n\n> Source: [${pageTitle}](${pageUrl})`;
+      const fullNoteContent = noteContent + sourceInfo;
+  
+      chrome.storage.sync.get(['apiKey', 'savePath'], (result) => {
+        if (!result.apiKey) {
+          showBubble('API Key or Save Path not set. Please set it in the extension options.');
+          isSaving = false;
+          return;
         }
-      }).catch(error => {
-        isSaving = false;
-        console.error('Error:', error);
-        showBubble('Error: ' + error.message);
+  
+        let savePath = result.savePath;
+        const now = new Date();
+        const formattedDate = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+  
+        const filename = savePath ? 
+          `${savePath}/${noteTitle ? formattedDate + ' ' + noteTitle : formattedDate}.md` : 
+          `${formattedDate}${noteTitle ? ' ' + noteTitle : ''}.md`;
+  
+        fetch(`https://127.0.0.1:27124/vault/${encodeURIComponent(filename)}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/markdown',
+            'Authorization': `Bearer ${result.apiKey}`
+          },
+          body: fullNoteContent
+        }).then(response => {
+          isSaving = false;
+          if (response.ok) {
+            showBubble('Note saved!');
+            inputBox.style.display = 'none';
+  
+            chrome.storage.local.remove(['noteTitle', 'noteContent', 'lastSaved']);
+  
+            shadow.getElementById('note-title').value = '';
+            shadow.getElementById('note-content').value = '';
+          } else {
+            response.text().then(text => {
+              showBubble('Failed to save note.');
+            });
+          }
+        }).catch(error => {
+          isSaving = false;
+          showBubble('Error: ' + error.message);
+        });
       });
     });
   }
