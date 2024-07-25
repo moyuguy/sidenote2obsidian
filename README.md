@@ -3,6 +3,7 @@
 需要搭配社区插件使用：[Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) 以通过安全的Local REST API 进行笔记的自动化处理。
 
 <img width="1892" alt="image" src="https://github.com/moyuguy/sidenote2obsidian/assets/5793687/f61fe423-4c10-42a4-91f6-62a87322146b">
+<img width="317" alt="image" src="https://github.com/user-attachments/assets/f0b10a19-0309-4a0f-b608-5303806d5664">
 
 
 
@@ -27,6 +28,10 @@
 ### Introduction
 A simple Chrome extension for quickly recording ideas on any webpage and sending them to Obsidian.
 Requires the community plugin [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) to interact with your notes in Obsidian over a secure REST API.
+
+
+<img width="313" alt="image" src="https://github.com/user-attachments/assets/f92cf68e-79a3-4b35-b614-4867f5332e3f">
+
 
 ### Installation
 1. Install the Local REST API plugin from the Obsidian community plugins.
