@@ -3,25 +3,107 @@ console.log("Content script loaded");
 if (!window.hasContentScriptLoaded) {
   window.hasContentScriptLoaded = true;
 
+  // 创建一个容器元素
+  const container = document.createElement('div');
+  container.id = 'my-extension-container';
+  document.body.appendChild(container);
+
+  // 创建Shadow DOM
+  const shadow = container.attachShadow({mode: 'open'});
+  const shadowRoot = shadow.getRootNode();
+
+  // 创建样式元素
+  const style = document.createElement('style');
+  style.textContent = `
+    :host {
+      all: initial;
+    }
+    #floating-ball {
+      position: fixed;
+      bottom: 350px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 2147483647;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    #input-box {
+      position: fixed;
+      width: 300px;
+      padding: 10px;
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 2147483647;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+    #input-box label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    #input-box input,
+    #input-box textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 5px;
+      box-sizing: border-box;
+      font-family: inherit;
+      font-size: inherit;
+    }
+    #input-box button {
+      padding: 8px 15px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+      height: 36px; // 确保所有按钮高度一致
+      line-height: 20px; // 调整行高以确保文本垂直居中
+    }
+    #input-box #save-note {
+      background-color: rgb(124 58 237);
+      color: white;
+    }
+    #input-box #save-note:hover {
+      background-color: rgb(109 40 217);
+    }
+    #input-box #clear-note {
+      background-color: white;
+      border: 1px solid rgb(124 58 237);
+      color: rgb(124 58 237);
+      box-sizing: border-box; // 确保边框不会增加按钮的总高度
+    }
+    #input-box #clear-note:hover {
+      background-color: rgb(124 58 237);
+      color: white;
+    }
+    #input-box p {
+      font-size: 12px;
+      color: #888;
+      margin: 5px 0 0;
+    }
+  `;
+  shadow.appendChild(style);
+
   // 创建悬浮球
   const ball = document.createElement('div');
   ball.id = 'floating-ball';
   const ballImageUrl = chrome.runtime.getURL('images/ball.png');
-  ball.style.cssText = `
-    position: fixed;
-    bottom: 350px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background-image: url('${ballImageUrl}');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 1000;
-  `;
-  document.body.appendChild(ball);
+  ball.style.backgroundImage = `url('${ballImageUrl}')`;
+  shadow.appendChild(ball);
   console.log("Floating ball created");
 
   // 悬浮球添加拖动功能
@@ -83,31 +165,28 @@ if (!window.hasContentScriptLoaded) {
 
   const inputBox = document.createElement('div');
   inputBox.id = 'input-box';
-  inputBox.style.cssText = `
-    position: fixed;
-    width: 300px;
-    padding: 10px;
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    display: none;
-    z-index: 1000;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;  /* 确保padding不影响元素总宽度 */
-  `;
   inputBox.innerHTML = `    
-    <label for="note-title" style="font-weight: bold;">Note Title (optional):</label>
-    <input type="text" id="note-title" style="width: 100%; margin-bottom: 10px; border: 1px solid #ccc; padding: 5px; box-sizing: border-box;">
-    <label for="note-content" style="font-weight: bold;">Note Content:</label>
-    <textarea id="note-content" rows="10" style="width: 100%; border: 1px solid #ccc; padding: 5px; box-sizing: border-box;"></textarea>
+    <label for="note-title">Note Title (optional):</label>
+    <input type="text" id="note-title">
+    <label for="note-content">Note Content:</label>
+    <textarea id="note-content" rows="10"></textarea>
     <button id="save-note">Save</button>
-    <button id="clear-note" style="background-color: white; border: 0 red; color: red;">Clear</button>
-    <p style="font-size: 12px; color: #888; margin: 0;">Cmd+Enter to submit, ESC to exit</p>
+    <button id="clear-note">Clear</button>
+    <p>Cmd+Enter to submit, ESC to exit</p>
   `;
-  document.body.appendChild(inputBox);
+  shadow.appendChild(inputBox);
   console.log("Input box created");
+  loadSavedNote(); // 加载保存的笔记内容
 
-  ball.addEventListener('click', function() {
+  // 使用 click 事件来处理输入框的显示和隐藏
+  document.addEventListener('click', function(event) {
+    if (!shadowRoot.contains(event.target) && !inputBox.contains(event.target) && !ball.contains(event.target)) {
+      inputBox.style.display = 'none';
+    }
+  });
+
+  ball.addEventListener('click', function(event) {
+    event.stopPropagation(); // 阻止事件冒泡
     chrome.storage.sync.get(['apiKey', 'savePath'], (result) => {
       const apiKey = result.apiKey;
       let savePath = result.savePath;
@@ -116,26 +195,35 @@ if (!window.hasContentScriptLoaded) {
         inputBox.style.display = inputBox.style.display === 'none' ? 'block' : 'none';
         if (inputBox.style.display === 'block') {
           updateInputBoxPosition();
-          document.getElementById('note-title').focus();
+          loadSavedNote(); // 加载保存的笔记内容
+          shadow.getElementById('note-title').focus();
         }
         console.log("Input box toggled");
       });
     });
   });
 
+  // 为输入框添加点击事件监听器，阻止事件冒泡
+inputBox.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
+
   let isSaving = false;
 
-  const saveButton = document.getElementById('save-note');
+  const saveButton = shadow.getElementById('save-note');
   saveButton.addEventListener('click', saveNoteHandler);
 
-  const clearButton = document.getElementById('clear-note');
+  const clearButton = shadow.getElementById('clear-note');
   clearButton.addEventListener('click', function() {
-    document.getElementById('note-title').value = '';
-    document.getElementById('note-content').value = '';
+    shadow.getElementById('note-title').value = '';
+    shadow.getElementById('note-content').value = '';
+    chrome.storage.local.remove(['noteTitle', 'noteContent', 'lastSaved'], function() {
+      console.log('Note content cleared from local storage');
+    });
   });
 
   // cmd+enter 提交
-  document.getElementById('note-content').addEventListener('keydown', function(event) {
+  shadow.getElementById('note-content').addEventListener('keydown', function(event) {
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
       event.preventDefault();
       saveNoteHandler();
@@ -144,7 +232,9 @@ if (!window.hasContentScriptLoaded) {
 
   // 按下esc隐藏窗口
   document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && (document.activeElement === document.getElementById('note-title') || document.activeElement === document.getElementById('note-content'))) {
+    const noteTitle = shadowRoot.getElementById('note-title');
+    const noteContent = shadowRoot.getElementById('note-content');
+    if (event.key === 'Escape' && (document.activeElement === noteTitle || document.activeElement === noteContent)) {
       inputBox.style.display = 'none';
     }
   });
@@ -152,8 +242,8 @@ if (!window.hasContentScriptLoaded) {
   function saveNoteHandler() {
     if (isSaving) return;
 
-    const noteTitle = document.getElementById('note-title').value.trim();
-    const noteContent = document.getElementById('note-content').value;
+    const noteTitle = shadow.getElementById('note-title').value.trim();
+    const noteContent = shadow.getElementById('note-content').value;
     if (!noteContent) {
       showBubble('Please enter note content.');
       return;
@@ -170,12 +260,8 @@ if (!window.hasContentScriptLoaded) {
 
       let savePath = result.savePath;
       const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const formattedDate = `${year}${month}${day}${hours}${minutes}`;
+      const formattedDate = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+
 
       const filename = savePath ? 
         `${savePath}/${noteTitle ? formattedDate + ' ' + noteTitle : formattedDate}.md` : 
@@ -193,8 +279,15 @@ if (!window.hasContentScriptLoaded) {
         if (response.ok) {
           showBubble('Note saved!');
           inputBox.style.display = 'none';
-          document.getElementById('note-title').value = '';
-          document.getElementById('note-content').value = '';
+
+          // 清除本地存储的笔记内容
+          chrome.storage.local.remove(['noteTitle', 'noteContent', 'lastSaved'], function() {
+            console.log('Saved note content cleared from local storage');
+          });
+
+          // 清空输入框
+          shadow.getElementById('note-title').value = '';
+          shadow.getElementById('note-content').value = '';
         } else {
           response.text().then(text => {
             console.error('Response text:', text);
@@ -209,30 +302,34 @@ if (!window.hasContentScriptLoaded) {
     });
   }
 
-  chrome.storage.local.get(['noteTitle', 'noteContent'], function(result) {
-    if (result.noteTitle) {
-      document.getElementById('note-title').value = result.noteTitle;
-    }
-    if (result.noteContent) {
-      document.getElementById('note-content').value = result.noteContent;
-    }
-  });
+  function saveNoteToLocal() {
+    const noteTitle = shadow.getElementById('note-title').value;
+    const noteContent = shadow.getElementById('note-content').value;
+    const lastSaved = new Date().getTime();
+    chrome.storage.local.set({ noteTitle, noteContent, lastSaved });
+  }
 
-  document.addEventListener('click', function(event) {
-    if (!inputBox.contains(event.target) && !ball.contains(event.target)) {
-      inputBox.style.display = 'none';
-    }
-  });
+  function loadSavedNote() {
+    chrome.storage.local.get(['noteTitle', 'noteContent', 'lastSaved'], function(result) {
+      if (result.lastSaved) {
+        const now = new Date().getTime();
+        const timeSinceLastSave = now - result.lastSaved;
+        
+        if (timeSinceLastSave <= 3600000) { // 1小时 = 3600000毫秒
+          shadow.getElementById('note-title').value = result.noteTitle || '';
+          shadow.getElementById('note-content').value = result.noteContent || '';
+        } else {
+          // 如果超过1小时,清除保存的内容
+          chrome.storage.local.remove(['noteTitle', 'noteContent', 'lastSaved']);
+        }
+      }
+    });
+  }
 
-  document.getElementById('note-title').addEventListener('input', function() {
-    const noteTitle = document.getElementById('note-title').value;
-    chrome.storage.local.set({ noteTitle });
-  });
-  
-  document.getElementById('note-content').addEventListener('input', function() {
-    const noteContent = document.getElementById('note-content').value;
-    chrome.storage.local.set({ noteContent });
-  });
+  // 在输入时保存笔记内容到本地存储
+  shadow.getElementById('note-title').addEventListener('input', saveNoteToLocal);
+  shadow.getElementById('note-content').addEventListener('input', saveNoteToLocal);
+
   
   function showBubble(message) {
     const bubble = document.createElement('div');
@@ -303,15 +400,15 @@ if (!window.hasContentScriptLoaded) {
       <button id="open-obsidian-button" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Open Obsidian</button>
     `;
     modal.appendChild(modalContent);
-    document.body.appendChild(modal);
+    shadowRoot.appendChild(modal);
 
-    document.getElementById('cancel-button').addEventListener('click', () => {
-      document.body.removeChild(modal);
+    modalContent.querySelector('#cancel-button').addEventListener('click', () => {
+      shadowRoot.removeChild(modal);
     });
-
-    document.getElementById('open-obsidian-button').addEventListener('click', () => {
+  
+    modalContent.querySelector('#open-obsidian-button').addEventListener('click', () => {
       window.location.href = 'obsidian://';
-      document.body.removeChild(modal);
+      shadowRoot.removeChild(modal);
     });
   }
 
@@ -347,7 +444,7 @@ if (!window.hasContentScriptLoaded) {
           inputBox.style.display = inputBox.style.display === 'none' ? 'block' : 'none';
           if (inputBox.style.display === 'block') {
             updateInputBoxPosition();
-            document.getElementById('note-title').focus();
+            shadow.getElementById('note-title').focus();
           }
         });
       });
