@@ -192,6 +192,85 @@ if (window.hasContentScriptLoaded) {
   `;
   shadow.appendChild(inputBox);
   console.log("Input box created");
+
+  // 以下处理视频网站快捷键冲突
+  const noteTitle = shadow.getElementById('note-title');
+  const noteContent = shadow.getElementById('note-content');
+
+  // 创建陷阱元素
+  const trapElement = document.createElement('div');
+  trapElement.style.position = 'fixed';
+  trapElement.style.top = '0';
+  trapElement.style.left = '0';
+  trapElement.style.width = '100%';
+  trapElement.style.height = '100%';
+  trapElement.style.zIndex = '2147483647'; // 最高的z-index
+  trapElement.style.display = 'none';
+  trapElement.style.pointerEvents = 'none'; // 允许点击穿透
+  shadow.appendChild(trapElement);
+
+  function activateTrap() {
+    trapElement.style.display = 'block';
+  }
+
+  function deactivateTrap() {
+    trapElement.style.display = 'none';
+  }
+
+  function handleKeyDown(event) {
+    // 处理 Cmd+Enter
+    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      event.stopPropagation();
+      saveNoteHandler(); // 调用保存笔记的函数
+      return;
+    }
+
+    // 处理 Esc
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      inputBox.style.display = 'none'; // 隐藏输入框
+      deactivateTrap(); // 停用陷阱
+      return;
+    }
+
+    // 对于其他键，阻止事件传播到页面的其他部分
+    if (event.key !== ' ') {  // 除了空格键
+      event.stopPropagation();
+    }
+  }
+
+  // 为陷阱元素添加事件监听器
+  trapElement.addEventListener('keydown', handleKeyDown, true);
+
+  // 当输入框获得焦点时激活陷阱
+  noteTitle.addEventListener('focus', activateTrap);
+  noteContent.addEventListener('focus', activateTrap);
+
+  // 当输入框失去焦点时停用陷阱
+  noteTitle.addEventListener('blur', deactivateTrap);
+  noteContent.addEventListener('blur', deactivateTrap);
+
+  // 为输入框单独添加空格键和Cmd+Enter处理
+  function handleInputKeyDown(event) {
+    if (event.key === ' ') {
+      event.stopPropagation();
+    } else if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      event.stopPropagation();
+      saveNoteHandler(); // 调用保存笔记的函数
+    }
+  }
+
+  noteTitle.addEventListener('keydown', handleInputKeyDown, true);
+  noteContent.addEventListener('keydown', handleInputKeyDown, true);
+
+  // 确保点击输入框不会使陷阱失效
+  inputBox.addEventListener('mousedown', function(event) {
+    event.stopPropagation();
+  });
+
   loadSavedNote(); // 加载保存的笔记内容
 
   // 使用 click 事件来处理输入框的显示和隐藏
@@ -241,12 +320,12 @@ if (window.hasContentScriptLoaded) {
   });
 
   // cmd+enter 提交
-  shadow.getElementById('note-content').addEventListener('keydown', function(event) {
-    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-      event.preventDefault();
-      saveNoteHandler();
-    }
-  });
+  // shadow.getElementById('note-content').addEventListener('keydown', function(event) {
+  //   if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+  //     event.preventDefault();
+  //     saveNoteHandler();
+  //   }
+  // });
 
   function saveNoteHandler() {
     if (isSaving) return;
@@ -445,6 +524,8 @@ if (window.hasContentScriptLoaded) {
       }
   
       event.preventDefault();
+      event.stopPropagation();
+
       chrome.storage.sync.get(['apiKey'], (result) => {
         if (!result.apiKey) {
           showBubble('Please set the API key first.');
@@ -459,7 +540,7 @@ if (window.hasContentScriptLoaded) {
           }
         });
       });
-    });
+    }, true); // 使用捕获阶段
   });
 
   function updateInputBoxPosition() {
