@@ -5,6 +5,10 @@ if (window.hasContentScriptLoaded) {
 
   console.log("Content script loaded");
 
+  // 定义需要特殊处理的键
+  const keysToHandle = [' ', 'k', 'j', 'l', 'f', 'm', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'c'];
+  const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+
   // 创建一个容器元素
   const container = document.createElement('div');
   container.id = 'my-extension-container';
@@ -14,11 +18,8 @@ if (window.hasContentScriptLoaded) {
   const shadow = container.attachShadow({mode: 'open'});
   const shadowRoot = shadow.getRootNode();
 
-  shadowRoot.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-      inputBox.style.display = 'none';
-    }
-  });
+  // 为整个 shadow DOM 添加事件监听器
+  shadowRoot.addEventListener('keydown', handleKeyDown, true);
 
   // 创建样式元素
   const style = document.createElement('style');
@@ -218,25 +219,36 @@ if (window.hasContentScriptLoaded) {
   }
 
   function handleKeyDown(event) {
-    // 处理 Cmd+Enter
+    // 首先处理 Cmd+Enter 和 Esc，无论在哪里触发
     if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       event.stopPropagation();
-      saveNoteHandler(); // 调用保存笔记的函数
+      saveNoteHandler();
       return;
-    }
-
-    // 处理 Esc
-    if (event.key === 'Escape') {
+    } else if (event.key === 'Escape') {
       event.preventDefault();
       event.stopPropagation();
-      inputBox.style.display = 'none'; // 隐藏输入框
-      deactivateTrap(); // 停用陷阱
+      inputBox.style.display = 'none';
+      deactivateTrap();
       return;
     }
-
-    // 对于其他键，阻止事件传播到页面的其他部分
-    if (event.key !== ' ') {  // 除了空格键
+  
+    // 检查事件是否来自我们的输入框
+    if (event.target === noteTitle || event.target === noteContent) {
+      if (arrowKeys.includes(event.key)) {
+        // 对于箭头键，只阻止事件传播
+        event.stopPropagation();
+      } else if (keysToHandle.includes(event.key.toLowerCase()) || (event.shiftKey && event.key.toLowerCase() === 'c')) {
+        // 对于其他特殊按键，阻止事件传播和默认行为
+        event.stopPropagation();
+      }
+      // 对于所有其他按键，允许默认行为
+      return;
+    }
+  
+   // 对于输入框外的按键，阻止特定按键的事件
+    if (keysToHandle.includes(event.key.toLowerCase()) || arrowKeys.includes(event.key) || (event.shiftKey && event.key.toLowerCase() === 'c')) {
+      event.preventDefault();
       event.stopPropagation();
     }
   }
@@ -251,20 +263,6 @@ if (window.hasContentScriptLoaded) {
   // 当输入框失去焦点时停用陷阱
   noteTitle.addEventListener('blur', deactivateTrap);
   noteContent.addEventListener('blur', deactivateTrap);
-
-  // 为输入框单独添加空格键和Cmd+Enter处理
-  function handleInputKeyDown(event) {
-    if (event.key === ' ') {
-      event.stopPropagation();
-    } else if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
-      event.preventDefault();
-      event.stopPropagation();
-      saveNoteHandler(); // 调用保存笔记的函数
-    }
-  }
-
-  noteTitle.addEventListener('keydown', handleInputKeyDown, true);
-  noteContent.addEventListener('keydown', handleInputKeyDown, true);
 
   // 确保点击输入框不会使陷阱失效
   inputBox.addEventListener('mousedown', function(event) {
@@ -318,14 +316,6 @@ if (window.hasContentScriptLoaded) {
       console.log('Note content cleared from local storage');
     });
   });
-
-  // cmd+enter 提交
-  // shadow.getElementById('note-content').addEventListener('keydown', function(event) {
-  //   if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-  //     event.preventDefault();
-  //     saveNoteHandler();
-  //   }
-  // });
 
   function saveNoteHandler() {
     if (isSaving) return;

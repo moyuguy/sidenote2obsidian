@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Notes Extension</title>
+  <title>Simple Obsidian Note</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,6 +21,23 @@
       margin-top: 15px;
       font-weight: bold;
       color: #555;
+    }
+    .api-key-container {
+      margin-bottom: 5px;
+    }
+
+    .api-key-container label {
+      display: flex;
+      align-items: baseline;
+      font-weight: bold;
+    }
+
+    .doc-link {
+      margin-left: 10px;
+      font-size: 14px;
+      color: #6200ee;
+      text-decoration: none;
+      font-weight: normal;
     }
     input, textarea {
       width: 100%;
@@ -79,9 +96,13 @@
 </head>
 <body>
   <div>
-    <h1>Simple Obsidian Note Extension</h1>
+    <h1>Simple Obsidian Note</h1>
     <p>Click the floating ball to add notes.</p>
-    <label for="api-key">API Key:</label>
+    <div class="api-key-container">
+      <label for="api-key">API Key: 
+        <a href="https://github.com/moyuguy/sidenote2obsidian/blob/master/README.md" target="_blank" class="doc-link">See Docs</a>
+      </label>
+    </div>
     <input type="text" id="api-key">
     <label for="save-path">Save Path:</label>
     <input type="text" id="save-path" placeholder="Leave empty to save to root directory">
