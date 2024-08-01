@@ -11,7 +11,7 @@
 1. 在 Obsidian 社区插件中安装 Local REST API。
 2. 在Chrome应用商店[下载](https://chromewebstore.google.com/detail/simple-obsidian-note-exte/flohnmomnafamkgbjonnjcjggkhiokkn)
 3. 如无法访问Chrome应用商店的可以下载压缩包
-   - [下载](https://github.com/user-attachments/files/16370350/sidenote2obsidian_v0.4.zip)本插件到本地并解压，建议将文件夹放置在一个不会随意删除的位置。
+   - [下载](https://github.com/moyuguy/sidenote2obsidian/releases)本插件到本地并解压，建议将文件夹放置在一个不会随意删除的位置。
    -  在 Chrome 地址栏输入 `chrome://extensions/` 进入扩展程序管理页面，右上角打开开发者模式。
    -  加载已解压的扩展程序，选择刚才解压好的文件夹。
 
@@ -39,7 +39,7 @@ Requires the community plugin [Obsidian Local REST API](https://github.com/coddi
 1. Install the Local REST API plugin from the Obsidian community plugins.
 2. Download in Chrome extensions store: [Click](https://chromewebstore.google.com/detail/simple-obsidian-note-exte/flohnmomnafamkgbjonnjcjggkhiokkn)
 3. If you can't access the Chrome Extensions Store, you can download the zip package
-   - [Download](https://github.com/user-attachments/files/16370350/sidenote2obsidian_v0.4.zip) and unzip this extension to a preferred location on your computer. Make sure not to delete this folder.
+   - [Download](https://github.com/moyuguy/sidenote2obsidian/releases) and unzip this extension to a preferred location on your computer. Make sure not to delete this folder.
    - Enter `chrome://extensions/` in the Chrome address bar to open the extensions management page and enable Developer mode in the top right corner.
    - Load the unpacked extension and select the folder you just unzipped.
 
