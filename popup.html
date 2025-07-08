@@ -39,7 +39,7 @@
       text-decoration: none;
       font-weight: normal;
     }
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
@@ -50,7 +50,7 @@
       font-size: 14px;
       transition: border-color 0.3s;
     }
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       outline: none;
       border-color: rgb(124 58 237);
     }
@@ -104,6 +104,11 @@
       </label>
     </div>
     <input type="text" id="api-key">
+    <label for="api-url">API URL:</label>
+    <select id="api-url">
+      <option value="http://127.0.0.1:27123">HTTP (http://127.0.0.1:27123)</option>
+      <option value="https://127.0.0.1:27124">HTTPS (https://127.0.0.1:27124)</option>
+    </select>
     <label for="save-path">Save Path:</label>
     <input type="text" id="save-path" placeholder="Leave empty to save to root directory">
     <label for="shortcut-key">Shortcut Key:</label>

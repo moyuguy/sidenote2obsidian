@@ -280,11 +280,12 @@ if (window.hasContentScriptLoaded) {
 
   ball.addEventListener('click', function(event) {
     event.stopPropagation(); // 阻止事件冒泡
-    chrome.storage.sync.get(['apiKey', 'savePath'], (result) => {
+    chrome.storage.sync.get(['apiKey', 'apiUrl', 'savePath'], (result) => {
       const apiKey = result.apiKey;
+      const apiUrl = result.apiUrl;
       let savePath = result.savePath;
       
-      checkServerAndApiKey(apiKey, () => {
+      checkServerAndApiKey(apiKey, apiUrl, () => {
         if (inputBox.style.display === 'none' || inputBox.style.display === '') {
           inputBox.style.display = 'block';
           updateInputBoxPosition();
@@ -337,22 +338,23 @@ if (window.hasContentScriptLoaded) {
       const sourceInfo = `\n\n> Source: [${pageTitle}](${pageUrl})`;
       const fullNoteContent = noteContent + sourceInfo;
   
-      chrome.storage.sync.get(['apiKey', 'savePath'], (result) => {
+      chrome.storage.sync.get(['apiKey', 'apiUrl', 'savePath'], (result) => {
         if (!result.apiKey) {
-          showBubble('API Key or Save Path not set. Please set it in the extension options.');
+          showBubble('API Key not set. Please set it in the extension options.');
           isSaving = false;
           return;
         }
-  
+
+        const apiUrl = result.apiUrl || 'http://127.0.0.1:27123'; // 默认值
         let savePath = result.savePath;
         const now = new Date();
         const formattedDate = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
-  
+
         const filename = savePath ? 
           `${savePath}/${noteTitle ? formattedDate + ' ' + noteTitle : formattedDate}.md` : 
           `${formattedDate}${noteTitle ? ' ' + noteTitle : ''}.md`;
-  
-        fetch(`https://127.0.0.1:27124/vault/${encodeURIComponent(filename)}`, {
+
+        fetch(`${apiUrl}/vault/${encodeURIComponent(filename)}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'text/markdown',
@@ -430,13 +432,17 @@ if (window.hasContentScriptLoaded) {
     }, 3000);
   }
 
-  function checkServerAndApiKey(apiKey, callback) {
+  function checkServerAndApiKey(apiKey, apiUrl, callback) {
     if (!apiKey) {
       showBubble('Please set the API key first.');
       return;
     }
 
-    fetch('https://127.0.0.1:27124')
+    if (!apiUrl) {
+      apiUrl = 'http://127.0.0.1:27123'; // 默认值
+    }
+
+    fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
         if (data.status === 'OK') {

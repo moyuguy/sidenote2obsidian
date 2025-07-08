@@ -13,10 +13,12 @@ Sidenote2Obsidian is a simple Chrome extension that allows you to quickly record
 - Quickly capture ideas and thoughts while browsing the web
 - Automatically save notes to your Obsidian vault
 - Customizable note-saving directory
+- **Configurable API URL**: Choose between HTTP and HTTPS connections to Obsidian
 - Intuitive user interface
 
 ## Installation 🚀
 1. Install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) plugin in your Obsidian app.
+   - **Important**: In the plugin settings, enable either "Enable Non-encrypted (HTTP) Server" (port 27123) or "Enable Encrypted (HTTPS) Server" (port 27124) based on your preference.
 2. Download the Sidenote2Obsidian extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/simple-obsidian-note-exte/flohnmomnafamkgbjonnjcjggkhiokkn).
 3. If you can't access the Chrome Web Store, you can also download the extension package from the [GitHub releases](https://github.com/moyuguy/sidenote2obsidian/releases):
    - Unzip the downloaded package to a preferred location on your computer.
@@ -25,9 +27,12 @@ Sidenote2Obsidian is a simple Chrome extension that allows you to quickly record
 ## Usage 📋
 1. Click the Sidenote2Obsidian extension icon to open the setup dialog.
 2. Enter the API Key from the Obsidian Local REST API plugin settings page.
-3. Optionally, set the note-saving directory (leave it empty to save in the Obsidian vault root).
-4. With the Obsidian app open, click the floating note-taking button to start capturing your ideas.
-5. The notes will be saved as Markdown files with a default filename pattern of `yyyyMMddhhmm{noteTitle}.md`. User-defined filenames are not yet supported.
+3. **Select the appropriate API URL**:
+   - **HTTP (http://127.0.0.1:27123)**: Choose this if you have enabled "Enable Non-encrypted (HTTP) Server" in the Obsidian Local REST API plugin settings
+   - **HTTPS (https://127.0.0.1:27124)**: Choose this if you're using the encrypted connection (requires certificate configuration)
+4. Optionally, set the note-saving directory (leave it empty to save in the Obsidian vault root).
+5. With the Obsidian app open, click the floating note-taking button to start capturing your ideas.
+6. The notes will be saved as Markdown files with a default filename pattern of `yyyyMMddhhmm{noteTitle}.md`. User-defined filenames are not yet supported.
 
 ## Contributing 🤝
 If you encounter any issues or have suggestions for improvements, please feel free to [open an issue](https://github.com/moyuguy/sidenote2obsidian/issues/new) on the project's GitHub repository. Pull requests are also welcome!
@@ -43,10 +48,12 @@ Sidenote2Obsidian 是一个简单的 Chrome 插件,能够让您在浏览网页�
 - 在浏览网页时快速捕捉想法和思路
 - 自动将笔记保存到 Obsidian 的笔记库中
 - 可自定义笔记保存目录
+- **可配置的 API URL**：支持选择 HTTP 或 HTTPS 连接方式
 - 简洁直观的用户界面
 
 ## 安装方式 🚀
 1. 在 Obsidian 应用程序中安装 [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) 插件。
+   - **重要提示**：在插件设置中，根据您的偏好启用"Enable Non-encrypted (HTTP) Server"（端口 27123）或"Enable Encrypted (HTTPS) Server"（端口 27124）。
 2. 从 [Chrome 应用商店](https://chromewebstore.google.com/detail/simple-obsidian-note-exte/flohnmomnafamkgbjonnjcjggkhiokkn)下载 Sidenote2Obsidian 扩展程序。
 3. 如果无法访问 Chrome 应用商店,您也可以从 [GitHub 发布页面](https://github.com/moyuguy/sidenote2obsidian/releases)下载扩展程序包:
    - 解压缩下载的包文件到您计算机上的首选位置。
@@ -55,9 +62,12 @@ Sidenote2Obsidian 是一个简单的 Chrome 插件,能够让您在浏览网页�
 ## 使用方法 📋
 1. 点击 Sidenote2Obsidian 扩展图标打开设置对话框。
 2. 输入 Obsidian Local REST API 插件设置页面上的 API Key。
-3. 可选择设置笔记保存目录(留空则保存在 Obsidian 库的根目录)。
-4. 在 Obsidian 应用程序打开的情况下,点击悬浮的记笔记按钮开始捕捉您的想法。
-5. 笔记将以 Markdown 文件形式保存,默认文件名格式为 `yyyyMMddhhmm{noteTitle}.md`。暂不支持自定义文件名。
+3. **选择合适的 API URL**：
+   - **HTTP (http://127.0.0.1:27123)**：如果您在 Obsidian Local REST API 插件设置中启用了"Enable Non-encrypted (HTTP) Server"，请选择此选项
+   - **HTTPS (https://127.0.0.1:27124)**：如果您使用加密连接（需要配置证书），请选择此选项
+4. 可选择设置笔记保存目录(留空则保存在 Obsidian 库的根目录)。
+5. 在 Obsidian 应用程序打开的情况下,点击悬浮的记笔记按钮开始捕捉您的想法。
+6. 笔记将以 Markdown 文件形式保存,默认文件名格式为 `yyyyMMddhhmm{noteTitle}.md`。暂不支持自定义文件名。
 
 ## 贡献参与 🤝
 如果您遇到任何问题或有改进建议,欢迎在项目的 GitHub 仓库中[提交 Issue](https://github.com/moyuguy/sidenote2obsidian/issues/new)。我们也欢迎您提交 Pull Request 参与贡献。

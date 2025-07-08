@@ -1,5 +1,6 @@
 document.getElementById('save').addEventListener('click', () => {
   const apiKey = document.getElementById('api-key').value;
+  const apiUrl = document.getElementById('api-url').value;
   let savePath = document.getElementById('save-path').value.trim();
   const shortcutKey = document.getElementById('shortcut-key').value.trim();
   const errorMessage = document.getElementById('error-message');
@@ -13,8 +14,8 @@ document.getElementById('save').addEventListener('click', () => {
     savePath = "";
   }
 
-  chrome.storage.sync.set({ apiKey: apiKey, savePath: savePath, shortcutKey: shortcutKey }, () => {
-    showBubble('API Key, Save Path, and Shortcut Key saved');
+  chrome.storage.sync.set({ apiKey: apiKey, apiUrl: apiUrl, savePath: savePath, shortcutKey: shortcutKey }, () => {
+    showBubble('Settings saved successfully');
     errorMessage.textContent = '';
 
     // 保存后刷新当前选项卡，让配置生效
@@ -29,6 +30,7 @@ document.getElementById('save').addEventListener('click', () => {
 document.getElementById('reset').addEventListener('click', () => {
   chrome.storage.sync.clear(() => {
     document.getElementById('api-key').value = '';
+    document.getElementById('api-url').value = 'http://127.0.0.1:27123';
     document.getElementById('save-path').value = '';
     document.getElementById('shortcut-key').value = 'Ctrl+o';
     showBubble('Settings cleared');
@@ -47,9 +49,14 @@ document.getElementById('shortcut-key').addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  chrome.storage.sync.get(['apiKey', 'savePath', 'shortcutKey'], (result) => {
+  chrome.storage.sync.get(['apiKey', 'apiUrl', 'savePath', 'shortcutKey'], (result) => {
     if (result.apiKey) {
       document.getElementById('api-key').value = result.apiKey;
+    }
+    if (result.apiUrl) {
+      document.getElementById('api-url').value = result.apiUrl;
+    } else {
+      document.getElementById('api-url').value = 'http://127.0.0.1:27123'; // 默认值
     }
     if (result.savePath) {
       document.getElementById('save-path').value = result.savePath;
