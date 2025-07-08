@@ -63,8 +63,8 @@ Sidenote2Obsidian 是一个简单的 Chrome 插件,能够让您在浏览网页�
 1. 点击 Sidenote2Obsidian 扩展图标打开设置对话框。
 2. 输入 Obsidian Local REST API 插件设置页面上的 API Key。
 3. **选择合适的 API URL**：
-   - **HTTP (http://127.0.0.1:27123)**：如果您在 Obsidian Local REST API 插件设置中启用了"Enable Non-encrypted (HTTP) Server"，请选择此选项
-   - **HTTPS (https://127.0.0.1:27124)**：如果您使用加密连接（需要配置证书），请选择此选项
+   - HTTP (http://127.0.0.1:27123)： 如果您在 Obsidian Local REST API 插件设置中启用了"Enable Non-encrypted (HTTP) Server"，请选择此选项
+   - HTTPS (https://127.0.0.1:27124)： 如果您使用加密连接（需要配置证书），请选择此选项
 4. 可选择设置笔记保存目录(留空则保存在 Obsidian 库的根目录)。
 5. 在 Obsidian 应用程序打开的情况下,点击悬浮的记笔记按钮开始捕捉您的想法。
 6. 笔记将以 Markdown 文件形式保存,默认文件名格式为 `yyyyMMddhhmm{noteTitle}.md`。暂不支持自定义文件名。
