@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Sidenote2obsidian",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "A simple Chrome extension for quickly recording ideas on any webpage and sending them to Obsidian.",
     "permissions": [
       "storage",

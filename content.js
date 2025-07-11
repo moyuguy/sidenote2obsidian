@@ -522,13 +522,13 @@ if (window.hasContentScriptLoaded) {
       event.preventDefault();
       event.stopPropagation();
 
-      chrome.storage.sync.get(['apiKey'], (result) => {
+      chrome.storage.sync.get(['apiKey', 'apiUrl'], (result) => {
         if (!result.apiKey) {
           showBubble('Please set the API key first.');
           return;
         }
   
-        checkServerAndApiKey(result.apiKey, () => {
+        checkServerAndApiKey(result.apiKey, result.apiUrl, () => {
           inputBox.style.display = inputBox.style.display === 'none' ? 'block' : 'none';
           if (inputBox.style.display === 'block') {
             updateInputBoxPosition();
