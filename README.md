@@ -1,73 +1,123 @@
-# Sidenote2Obsidian 📒
-[English](#introduction) | [中文](#简介)
+# Sidenote2Obsidian
 
-![Chrome Web Store](https://img.shields.io/chrome-web-store/v/flohnmomnafamkgbjonnjcjggkhiokkn?label=Chrome%20Web%20Store&style=flat-square) ![GitHub issues](https://img.shields.io/github/issues/moyuguy/Sidenote2obsidian?style=flat-square)
+<div align="center">
 
-## Introduction
-Sidenote2Obsidian is a simple Chrome extension that allows you to quickly record ideas on any webpage and send them directly to your Obsidian app. It integrates with the Obsidian community plugin [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) to seamlessly interact with your notes through a secure local REST API.
+![Sidenote2Obsidian](assets/icon.png)
 
-<img width="1892" alt="image" src="https://github.com/moyuguy/Sidenote2obsidian/assets/5793687/f61fe423-4c10-42a4-91f6-62a87322146b">
-<img width="313" alt="image" src="https://github.com/user-attachments/assets/f92cf68e-79a3-4b35-b614-4867f5332e3f">
+**Capture ideas, bookmarks, and reading notes directly from Chrome to Obsidian.**
 
-## Features ✨
-- Quickly capture ideas and thoughts while browsing the web
-- Automatically save notes to your Obsidian vault
-- Customizable note-saving directory
-- **Configurable API URL**: Choose between HTTP and HTTPS connections to Obsidian
-- Intuitive user interface
+[English](#english) | [简体中文](#简体中文) | [日本語](#日本語)
 
-## Installation 🚀
-1. Install the [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) plugin in your Obsidian app.
-   - **Important**: In the plugin settings, enable either "Enable Non-encrypted (HTTP) Server" (port 27123) or "Enable Encrypted (HTTPS) Server" (port 27124) based on your preference.
-2. Download the Sidenote2Obsidian extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/sidenote2obsidian/flohnmomnafamkgbjonnjcjggkhiokkn).
-3. If you can't access the Chrome Web Store, you can also download the extension package from the [GitHub releases](https://github.com/moyuguy/Sidenote2obsidian/releases):
-   - Unzip the downloaded package to a preferred location on your computer.
-   - Open the Chrome Extensions page (`chrome://extensions/`), enable Developer mode, and load the unpacked extension by selecting the unzipped folder.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](package.json)
 
-## Usage 📋
-1. Click the Sidenote2Obsidian extension icon to open the setup dialog.
-2. Enter the API Key from the Obsidian Local REST API plugin settings page.
-3. **Select the appropriate API URL**:
-   - **HTTP (http://127.0.0.1:27123)**: Choose this if you have enabled "Enable Non-encrypted (HTTP) Server" in the Obsidian Local REST API plugin settings
-   - **HTTPS (https://127.0.0.1:27124)**: Choose this if you're using the encrypted connection (requires certificate configuration)
-4. Optionally, set the note-saving directory (leave it empty to save in the Obsidian vault root).
-5. With the Obsidian app open, click the floating note-taking button to start capturing your ideas.
-6. The notes will be saved as Markdown files with a default filename pattern of `yyyyMMddhhmm{noteTitle}.md`. User-defined filenames are not yet supported.
-
-## Contributing 🤝
-If you encounter any issues or have suggestions for improvements, please feel free to [open an issue](https://github.com/moyuguy/Sidenote2obsidian/issues/new) on the project's GitHub repository. Pull requests are also welcome!
+</div>
 
 ---
-## 简介
-Sidenote2Obsidian 是一个简单的 Chrome 插件,能够让您在浏览网页时快速记录想法,并直接发送到 Obsidian 应用程序。它与 Obsidian 社区插件 [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) 集成,通过安全的本地 REST API 与您的笔记进行交互。
 
-<img width="1892" alt="image" src="https://github.com/moyuguy/sidenote2obsidian/assets/5793687/f61fe423-4c10-42a4-91f6-62a87322146b">
-<img width="317" alt="image" src="https://github.com/user-attachments/assets/f0b10a19-0309-4a0f-b608-5303806d5664">
+<a name="english"></a>
+## 🇬🇧 English
 
-## 功能特性 ✨
-- 在浏览网页时快速捕捉想法和思路
-- 自动将笔记保存到 Obsidian 的笔记库中
-- 可自定义笔记保存目录
-- **可配置的 API URL**：支持选择 HTTP 或 HTTPS 连接方式
-- 简洁直观的用户界面
+**Sidenote2Obsidian** is a powerful Chrome extension designed to streamline your knowledge capture workflow. It sits conveniently in your browser's side panel, allowing you to jot down thoughts, save bookmarks, or draft reading notes without leaving the page you are viewing. All your notes are synced directly to your Obsidian vault via the Local REST API.
 
-## 安装方式 🚀
-1. 在 Obsidian 应用程序中安装 [Obsidian Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api) 插件。
-   - **重要提示**：在插件设置中，根据您的偏好启用"Enable Non-encrypted (HTTP) Server"（端口 27123）或"Enable Encrypted (HTTPS) Server"（端口 27124）。
-2. 从 [Chrome 应用商店](https://chromewebstore.google.com/detail/sidenote2obsidian/flohnmomnafamkgbjonnjcjggkhiokkn)下载 Sidenote2Obsidian 扩展程序。
-3. 如果无法访问 Chrome 应用商店,您也可以从 [GitHub 发布页面](https://github.com/moyuguy/sidenote2obsidian/releases)下载扩展程序包:
-   - 解压缩下载的包文件到您计算机上的首选位置。
-   - 打开 Chrome 扩展页面 (`chrome://extensions/`)、启用开发者模式,然后加载已解压的扩展程序,选择解压缩的文件夹。
+### ✨ Features
 
-## 使用方法 📋
-1. 点击 Sidenote2Obsidian 扩展图标打开设置对话框。
-2. 输入 Obsidian Local REST API 插件设置页面上的 API Key。
-3. **选择合适的 API URL**：
-   - HTTP (http://127.0.0.1:27123)： 如果您在 Obsidian Local REST API 插件设置中启用了"Enable Non-encrypted (HTTP) Server"，请选择此选项
-   - HTTPS (https://127.0.0.1:27124)： 如果您使用加密连接（需要配置证书），请选择此选项
-4. 可选择设置笔记保存目录(留空则保存在 Obsidian 库的根目录)。
-5. 在 Obsidian 应用程序打开的情况下,点击悬浮的记笔记按钮开始捕捉您的想法。
-6. 笔记将以 Markdown 文件形式保存,默认文件名格式为 `yyyyMMddhhmm{noteTitle}.md`。暂不支持自定义文件名。
+- **Sidebar Integration**: Opens alongside your web content for seamless note-taking.
+- **Rich Templates**: Comes with built-in templates (Quick Note, Bookmark, Quote, Idea, Reading) and supports custom templates.
+- **Offline Support**: Drafts are saved locally first. Work offline and sync when Obsidian is ready.
+- **Automatic Sync**: Option to automatically sync saved drafts to Obsidian in the background.
+- **Smart Context**: Automatically grabs the page title, URL, and selected text directly into your note.
+- **Multi-language**: Fully localized interface and templates in English, Chinese, and Japanese.
 
-## 贡献参与 🤝
-如果您遇到任何问题或有改进建议,欢迎在项目的 GitHub 仓库中[提交 Issue](https://github.com/moyuguy/Sidenote2obsidian/issues/new)。我们也欢迎您提交 Pull Request 参与贡献。
+### 🚀 Getting Started
+
+#### 1. Prepare Obsidian
+1. Install the **[Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api)** plugin from the Obsidian Community Plugins list.
+2. Enable the plugin.
+3. Go to the plugin settings and look for your **API Key**. Copy it.
+   * *Note: Ensure you are using HTTPS or HTTP as configured (default is HTTP/127.0.0.1:27123).*
+
+#### 2. Configure Extension
+1. Open the Sidenote2Obsidian extension (click the icon or use `Ctrl+Shift+O` / `Cmd+Shift+O`).
+2. Go to **Settings**.
+3. Paste your **API Key**.
+4. (Optional) Set a **Save Path** (e.g., `Inbox/Web`). If connected, it will auto-suggest folders from your vault.
+
+### ⌨️ Shortcuts
+
+- **Toggle Side Panel**: `Cmd/Ctrl + Shift + O` (Chrome Global)
+- **New Note**: `Cmd/Ctrl + N`
+- **Toggle Preview**: `Cmd/Ctrl + E`
+- **Save Draft**: `Cmd/Ctrl + Enter`
+
+---
+
+<a name="简体中文"></a>
+## 🇨🇳 简体中文
+
+**Sidenote2Obsidian** 是一款专为 Obsidian 用户设计的 Chrome 扩展，旨在优化您的知识捕获流程。它驻留在浏览器的侧边栏中，让您无需离开当前页面即可快速记录想法、保存书签或撰写阅读笔记。所有笔记都通过 Local REST API 直接同步到您的 Obsidian 库中。
+
+### ✨ 主要功能
+
+- **侧边栏集成**：与网页内容并排显示，实现无缝笔记体验。
+- **丰富模板**：内置多种模板（快速笔记、书签、摘录、灵感、阅读笔记），并支持自定义。
+- **离线支持**：草稿优先本地保存。即使 Obsidian 未打开也能记录，稍后一键同步。
+- **自动同步**：支持后台自动将草稿同步到 Obsidian。
+- **智能上下文**：自动获取当前页面的标题、链接和选中的文本填充到模板中。
+- **多语言支持**：界面与模板全面支持简体中文、英语和日语。
+
+### 🚀 快速开始
+
+#### 1. 配置 Obsidian
+1. 在 Obsidian 社区插件市场中搜索并安装 **[Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api)** 插件。
+2. 启用该插件。
+3. 进入插件设置页面，找到 **API Key** 并复制。
+   * *注意：请确保您使用的是 HTTP 协议（默认地址 http://127.0.0.1:27123）。*
+
+#### 2. 配置扩展
+1. 打开 Sidenote2Obsidian 扩展（点击图标或使用快捷键）。
+2. 进入 **设置 (Settings)** 页面。
+3. 粘贴您的 **API Key**。
+4. （可选）设置 **保存路径**（例如 `Inbox/Web`）。连接成功后，扩展会自动联想您库中的文件夹。
+
+### ⌨️ 快捷键
+
+- **打开侧边栏**：`Cmd/Ctrl + Shift + O` (Chrome 全局)
+- **新建笔记**：`Cmd/Ctrl + N`
+- **切换预览**：`Cmd/Ctrl + E`
+- **保存草稿**：`Cmd/Ctrl + Enter`
+
+---
+
+<a name="日本語"></a>
+## 🇯🇵 日本語
+
+**Sidenote2Obsidian** は、ウェブ閲覧中の知識収集を効率化するために設計された強力なChrome拡張機能です。ブラウザのサイドパネルに常駐し、ページを離れることなくアイデアのメモ、ブックマークの保存、読書メモの作成が可能です。すべてのメモは Local REST API を介して Obsidian ボルトに直接同期されます。
+
+### ✨ 特徴
+
+- **サイドバー統合**: ウェブコンテンツの横でシームレスにメモを作成できます。
+- **豊富なテンプレート**: 組み込みテンプレート（クイックメモ、ブックマーク、引用、アイデア、読書メモ）に加え、カスタムテンプレートもサポート。
+- **オフラインサポート**: 下書きはローカルに保存されます。Obsidianが起動していなくても記録でき、後で同期可能です。
+- **自動同期**: バックグラウンドでObsidianに自動同期するオプションがあります。
+- **スマートコンテキスト**: 閲覧中のページのタイトル、URL、選択テキストを自動的に取得します。
+- **多言語対応**: インターフェースとテンプレートは日本語、英語、中国語に完全対応しています。
+
+### 🚀 始め方
+
+#### 1. Obsidianの準備
+1. Obsidianのコミュニティプラグインから **[Local REST API](https://github.com/coddingtonbear/obsidian-local-rest-api)** をインストールします。
+2. プラグインを有効にします。
+3. 設定画面で **API Key** を見つけてコピーします。
+
+#### 2. 拡張機能の設定
+1. Sidenote2Obsidianを開きます。
+2. **設定 (Settings)** に移動します。
+3. **API Key** を貼り付けます。
+4. （オプション）**保存パス**（例：`Inbox/Web`）を設定します。
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).

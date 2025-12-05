@@ -1,0 +1,5 @@
+node_modules
+.plasmo
+build
+.env
+.DS_Store

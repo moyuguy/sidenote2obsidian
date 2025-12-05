@@ -1,0 +1,131 @@
+{
+    "appName": {
+        "message": "sidenote2obsidian"
+    },
+    "statusConnected": {
+        "message": "Listo"
+    },
+    "statusDisconnected": {
+        "message": "Abrir"
+    },
+    "statusChecking": {
+        "message": "..."
+    },
+    "openObsidian": {
+        "message": "Abrir Obsidian"
+    },
+    "settingsTitle": {
+        "message": "Configuración"
+    },
+    "back": {
+        "message": "Atrás"
+    },
+    "continue": {
+        "message": "Continuar"
+    },
+    "connectionSection": {
+        "message": "Conexión"
+    },
+    "apiKeyLabel": {
+        "message": "Clave API"
+    },
+    "apiKeyPlaceholder": {
+        "message": "Introduce tu clave API"
+    },
+    "apiUrlLabel": {
+        "message": "URL de la API"
+    },
+    "savePathLabel": {
+        "message": "Ruta de guardado"
+    },
+    "savePathPlaceholder": {
+        "message": "Ej: Notas/Web o selecciona de la lista"
+    },
+    "savePathHelp": {
+        "message": "Selecciona una carpeta existente o escribe una nueva."
+    },
+    "shortcutsSection": {
+        "message": "Atajos"
+    },
+    "shortcutGlobalLabel": {
+        "message": "Alternar Panel Lateral (Global)"
+    },
+    "shortcutGlobalHelp": {
+        "message": "Los atajos globales ahora son gestionados por Chrome."
+    },
+    "configureShortcut": {
+        "message": "Configurar Atajo"
+    },
+    "shortcutNewNote": {
+        "message": "Nueva Nota (Panel Lateral)"
+    },
+    "shortcutSave": {
+        "message": "Guardar Borrador (Editor)"
+    },
+    "shortcutPreview": {
+        "message": "Alternar Vista Previa (Editor)"
+    },
+    "templatesSection": {
+        "message": "Plantillas"
+    },
+    "addTemplate": {
+        "message": "Añadir"
+    },
+    "filenamePattern": {
+        "message": "Patrón de nombre de archivo"
+    },
+    "contentTemplate": {
+        "message": "Plantilla de contenido"
+    },
+    "templateVariables": {
+        "message": "Variables: {{title}}, {{date}}, {{source_title}}, {{source_url}}, {{created}}"
+    },
+    "editorTitlePlaceholder": {
+        "message": "Título de la nota..."
+    },
+    "editorContentPlaceholder": {
+        "message": "Escribe tu nota aquí..."
+    },
+    "saveDraft": {
+        "message": "Guardar Borrador"
+    },
+    "cancel": {
+        "message": "Cancelar"
+    },
+    "uploadAll": {
+        "message": "Subir Todo"
+    },
+    "uploading": {
+        "message": "Subiendo..."
+    },
+    "deleteConfirm": {
+        "message": "¿Estás seguro de que quieres eliminar este borrador?"
+    },
+    "uploadFailed": {
+        "message": "Error al subir la tarjeta a Obsidian."
+    },
+    "noDrafts": {
+        "message": "No hay borradores para esta página"
+    },
+    "connectFirst": {
+        "message": "Por favor, conéctate a Obsidian primero."
+    },
+    "gettingStarted": {
+        "message": "Empezando"
+    },
+    "installPlugin": {
+        "message": "Instala el plugin 'Local REST API' en Obsidian"
+    },
+    "enablePlugin": {
+        "message": "Habilita el plugin y copia la Clave API"
+    },
+    "pasteKey": {
+        "message": "Pega la Clave API abajo"
+    },
+    "keepOpen": {
+        "message": "Mantén Obsidian abierto mientras usas esta extensión"
+    },
+    "viewDocs": {
+        "message": "Ver documentación del plugin"
+    }
+}

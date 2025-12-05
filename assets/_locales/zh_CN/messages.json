@@ -1,0 +1,255 @@
+{
+    "appName": {
+        "message": "Sidenote2Obsidian"
+    },
+    "statusConnected": {
+        "message": "就绪"
+    },
+    "statusDisconnected": {
+        "message": "离线"
+    },
+    "statusChecking": {
+        "message": "..."
+    },
+    "openObsidian": {
+        "message": "打开 Obsidian"
+    },
+    "settingsTitle": {
+        "message": "设置"
+    },
+    "back": {
+        "message": "返回"
+    },
+    "continue": {
+        "message": "继续"
+    },
+    "connectionSection": {
+        "message": "连接"
+    },
+    "apiKeyLabel": {
+        "message": "API 密钥"
+    },
+    "apiKeyPlaceholder": {
+        "message": "输入您的 API 密钥"
+    },
+    "apiUrlLabel": {
+        "message": "API 地址"
+    },
+    "storageSection": {
+        "message": "存储"
+    },
+    "savePathLabel": {
+        "message": "保存路径"
+    },
+    "savePathPlaceholder": {
+        "message": "例如：Notes/Web 或从列表中选择"
+    },
+    "savePathHelp": {
+        "message": "从您的库中选择现有文件夹或输入新文件夹。"
+    },
+    "editorSection": {
+        "message": "编辑器"
+    },
+    "strictLineBreaks": {
+        "message": "严格换行"
+    },
+    "strictLineBreaksHelp": {
+        "message": "开启后需双换行才能换段"
+    },
+    "languageSection": {
+        "message": "语言"
+    },
+    "languageAuto": {
+        "message": "跟随系统"
+    },
+    "shortcutsSection": {
+        "message": "快捷键"
+    },
+    "shortcutGlobalLabel": {
+        "message": "打开侧边栏 (全局)"
+    },
+    "shortcutGlobalHelp": {
+        "message": "全局快捷键现由 Chrome 管理。"
+    },
+    "configureShortcut": {
+        "message": "配置快捷键"
+    },
+    "shortcutNewNote": {
+        "message": "新建笔记"
+    },
+    "shortcutSave": {
+        "message": "保存草稿 (编辑器)"
+    },
+    "shortcutPreview": {
+        "message": "切换预览 (编辑器)"
+    },
+    "templatesSection": {
+        "message": "模板"
+    },
+    "addTemplate": {
+        "message": "添加"
+    },
+    "filenamePattern": {
+        "message": "文件名格式"
+    },
+    "contentTemplate": {
+        "message": "内容模板"
+    },
+    "templateVariables": {
+        "message": "变量: {{title}}, {{date}}, {{source_title}}, {{source_url}}, {{created}}"
+    },
+    "editorTitlePlaceholder": {
+        "message": "笔记标题..."
+    },
+    "editorContentPlaceholder": {
+        "message": "在此处书写笔记..."
+    },
+    "saveDraft": {
+        "message": "保存草稿"
+    },
+    "cancel": {
+        "message": "取消"
+    },
+    "syncAll": {
+        "message": "全部同步"
+    },
+    "syncing": {
+        "message": "同步中..."
+    },
+    "sync": {
+        "message": "同步"
+    },
+    "synced": {
+        "message": "已同步"
+    },
+    "draft": {
+        "message": "草稿"
+    },
+    "deleteConfirm": {
+        "message": "确定要删除此草稿吗？"
+    },
+    "syncFailed": {
+        "message": "同步到 Obsidian 失败。"
+    },
+    "noDrafts": {
+        "message": "当前页面没有草稿"
+    },
+    "draftsCount": {
+        "message": "$COUNT$ 个草稿",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "connectFirst": {
+        "message": "请先连接到 Obsidian。"
+    },
+    "gettingStarted": {
+        "message": "快速开始"
+    },
+    "installPlugin": {
+        "message": "在 Obsidian 中安装 'Local REST API' 插件"
+    },
+    "enablePlugin": {
+        "message": "启用插件并复制 API 密钥"
+    },
+    "pasteKey": {
+        "message": "在下方粘贴 API 密钥"
+    },
+    "keepOpen": {
+        "message": "使用此扩展时请保持 Obsidian 开启"
+    },
+    "viewDocs": {
+        "message": "查看插件文档"
+    },
+    "resetSettings": {
+        "message": "恢复默认设置"
+    },
+    "resetConfirm": {
+        "message": "确定恢复所有设置为默认值？此操作无法撤销。"
+    },
+    "settings": {
+        "message": "设置"
+    },
+    "loadingDrafts": {
+        "message": "加载草稿中..."
+    },
+    "strictLineBreaksHelpFull": {
+        "message": "仅影响此处预览效果，建议与 Obsidian 设置保持一致。"
+    },
+    "defaultTemplate": {
+        "message": "默认"
+    },
+    "setAsDefault": {
+        "message": "设为默认"
+    },
+    "templateQuickNote": {
+        "message": "快速笔记"
+    },
+    "templateBookmark": {
+        "message": "书签"
+    },
+    "templateQuote": {
+        "message": "摘录"
+    },
+    "templateIdea": {
+        "message": "灵感"
+    },
+    "templateReading": {
+        "message": "阅读笔记"
+    },
+    "whySaved": {
+        "message": "收藏原因："
+    },
+    "myThoughts": {
+        "message": "我的思考："
+    },
+    "theIdea": {
+        "message": "想法："
+    },
+    "nextSteps": {
+        "message": "下一步："
+    },
+    "keyPoints": {
+        "message": "要点"
+    },
+    "quotes": {
+        "message": "摘录"
+    },
+    "mySummary": {
+        "message": "我的总结"
+    },
+    "actionItems": {
+        "message": "行动项"
+    },
+    "trigger": {
+        "message": "触发："
+    },
+    "escToExit": {
+        "message": "按 ESC 退出"
+    },
+    "autoSyncSection": {
+        "message": "自动同步"
+    },
+    "autoSyncEnabled": {
+        "message": "启用自动同步"
+    },
+    "autoSyncInterval": {
+        "message": "每 $MINUTES$ 分钟同步",
+        "placeholders": {
+            "minutes": {
+                "content": "$1"
+            }
+        }
+    },
+    "autoSyncHelp": {
+        "message": "自动将草稿同步到 Obsidian"
+    },
+    "deleteDraft": {
+        "message": "删除"
+    },
+    "confirmDelete": {
+        "message": "确认？"
+    }
+}

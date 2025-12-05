@@ -1,0 +1,131 @@
+{
+    "appName": {
+        "message": "sidenote2obsidian"
+    },
+    "statusConnected": {
+        "message": "準備完了"
+    },
+    "statusDisconnected": {
+        "message": "開く"
+    },
+    "statusChecking": {
+        "message": "..."
+    },
+    "openObsidian": {
+        "message": "Obsidianを開く"
+    },
+    "settingsTitle": {
+        "message": "設定"
+    },
+    "back": {
+        "message": "戻る"
+    },
+    "continue": {
+        "message": "続行"
+    },
+    "connectionSection": {
+        "message": "接続"
+    },
+    "apiKeyLabel": {
+        "message": "APIキー"
+    },
+    "apiKeyPlaceholder": {
+        "message": "APIキーを入力してください"
+    },
+    "apiUrlLabel": {
+        "message": "API URL"
+    },
+    "savePathLabel": {
+        "message": "保存先パス"
+    },
+    "savePathPlaceholder": {
+        "message": "例: Notes/Web またはリストから選択"
+    },
+    "savePathHelp": {
+        "message": "既存のフォルダを選択するか、新しいフォルダを入力してください。"
+    },
+    "shortcutsSection": {
+        "message": "ショートカット"
+    },
+    "shortcutGlobalLabel": {
+        "message": "サイドパネルの切り替え (グローバル)"
+    },
+    "shortcutGlobalHelp": {
+        "message": "グローバルショートカットはChromeによって管理されています。"
+    },
+    "configureShortcut": {
+        "message": "ショートカットを設定"
+    },
+    "shortcutNewNote": {
+        "message": "新しいノート (サイドパネル)"
+    },
+    "shortcutSave": {
+        "message": "下書きを保存 (エディタ)"
+    },
+    "shortcutPreview": {
+        "message": "プレビュー切り替え (エディタ)"
+    },
+    "templatesSection": {
+        "message": "テンプレート"
+    },
+    "addTemplate": {
+        "message": "追加"
+    },
+    "filenamePattern": {
+        "message": "ファイル名パターン"
+    },
+    "contentTemplate": {
+        "message": "コンテンツテンプレート"
+    },
+    "templateVariables": {
+        "message": "変数: {{title}}, {{date}}, {{source_title}}, {{source_url}}, {{created}}"
+    },
+    "editorTitlePlaceholder": {
+        "message": "ノートのタイトル..."
+    },
+    "editorContentPlaceholder": {
+        "message": "ここにノートを書いてください..."
+    },
+    "saveDraft": {
+        "message": "下書きを保存"
+    },
+    "cancel": {
+        "message": "キャンセル"
+    },
+    "uploadAll": {
+        "message": "すべてアップロード"
+    },
+    "uploading": {
+        "message": "アップロード中..."
+    },
+    "deleteConfirm": {
+        "message": "この下書きを削除してもよろしいですか？"
+    },
+    "uploadFailed": {
+        "message": "Obsidianへのアップロードに失敗しました。"
+    },
+    "noDrafts": {
+        "message": "このページの下書きはありません"
+    },
+    "connectFirst": {
+        "message": "まずObsidianに接続してください。"
+    },
+    "gettingStarted": {
+        "message": "はじめる"
+    },
+    "installPlugin": {
+        "message": "Obsidianに 'Local REST API' プラグインをインストール"
+    },
+    "enablePlugin": {
+        "message": "プラグインを有効にしてAPIキーをコピー"
+    },
+    "pasteKey": {
+        "message": "下にAPIキーを貼り付け"
+    },
+    "keepOpen": {
+        "message": "この拡張機能を使用中はObsidianを開いたままにしてください"
+    },
+    "viewDocs": {
+        "message": "プラグインのドキュメントを見る"
+    }
+}

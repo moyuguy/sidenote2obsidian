@@ -1,0 +1,255 @@
+{
+    "appName": {
+        "message": "Sidenote2Obsidian"
+    },
+    "statusConnected": {
+        "message": "Ready"
+    },
+    "statusDisconnected": {
+        "message": "Offline"
+    },
+    "statusChecking": {
+        "message": "..."
+    },
+    "openObsidian": {
+        "message": "Open Obsidian"
+    },
+    "settingsTitle": {
+        "message": "Settings"
+    },
+    "back": {
+        "message": "Back"
+    },
+    "continue": {
+        "message": "Continue"
+    },
+    "connectionSection": {
+        "message": "Connection"
+    },
+    "apiKeyLabel": {
+        "message": "API Key"
+    },
+    "apiKeyPlaceholder": {
+        "message": "Enter your API Key"
+    },
+    "apiUrlLabel": {
+        "message": "API URL"
+    },
+    "storageSection": {
+        "message": "Storage"
+    },
+    "savePathLabel": {
+        "message": "Save Path"
+    },
+    "savePathPlaceholder": {
+        "message": "e.g., Notes/Web or select from list"
+    },
+    "savePathHelp": {
+        "message": "Select an existing folder from your vault or type a new one."
+    },
+    "editorSection": {
+        "message": "Editor"
+    },
+    "strictLineBreaks": {
+        "message": "Strict Line Breaks"
+    },
+    "strictLineBreaksHelp": {
+        "message": "Require double line breaks for new paragraph"
+    },
+    "languageSection": {
+        "message": "Language"
+    },
+    "languageAuto": {
+        "message": "Follow System"
+    },
+    "shortcutsSection": {
+        "message": "Shortcuts"
+    },
+    "shortcutGlobalLabel": {
+        "message": "Toggle Side Panel (Global)"
+    },
+    "shortcutGlobalHelp": {
+        "message": "Global shortcuts are now managed by Chrome."
+    },
+    "configureShortcut": {
+        "message": "Configure Shortcut"
+    },
+    "shortcutNewNote": {
+        "message": "New Note"
+    },
+    "shortcutSave": {
+        "message": "Save Draft (Editor)"
+    },
+    "shortcutPreview": {
+        "message": "Toggle Preview (Editor)"
+    },
+    "templatesSection": {
+        "message": "Templates"
+    },
+    "addTemplate": {
+        "message": "Add"
+    },
+    "filenamePattern": {
+        "message": "Filename Pattern"
+    },
+    "contentTemplate": {
+        "message": "Content Template"
+    },
+    "templateVariables": {
+        "message": "Variables: {{title}}, {{date}}, {{source_title}}, {{source_url}}, {{created}}"
+    },
+    "editorTitlePlaceholder": {
+        "message": "Note Title..."
+    },
+    "editorContentPlaceholder": {
+        "message": "Write your note here..."
+    },
+    "saveDraft": {
+        "message": "Save Draft"
+    },
+    "cancel": {
+        "message": "Cancel"
+    },
+    "syncAll": {
+        "message": "Sync All"
+    },
+    "syncing": {
+        "message": "Syncing..."
+    },
+    "sync": {
+        "message": "Sync"
+    },
+    "synced": {
+        "message": "Synced"
+    },
+    "draft": {
+        "message": "Draft"
+    },
+    "deleteConfirm": {
+        "message": "Are you sure you want to delete this draft?"
+    },
+    "syncFailed": {
+        "message": "Failed to sync to Obsidian."
+    },
+    "noDrafts": {
+        "message": "No drafts for this page"
+    },
+    "draftsCount": {
+        "message": "$COUNT$ Draft(s)",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "connectFirst": {
+        "message": "Please connect to Obsidian first."
+    },
+    "gettingStarted": {
+        "message": "Getting Started"
+    },
+    "installPlugin": {
+        "message": "Install 'Local REST API' plugin in Obsidian"
+    },
+    "enablePlugin": {
+        "message": "Enable the plugin and copy the API Key"
+    },
+    "pasteKey": {
+        "message": "Paste the API Key below"
+    },
+    "keepOpen": {
+        "message": "Keep Obsidian open while using this extension"
+    },
+    "viewDocs": {
+        "message": "View Plugin Documentation"
+    },
+    "resetSettings": {
+        "message": "Reset to Default"
+    },
+    "resetConfirm": {
+        "message": "Reset all settings to default? This cannot be undone."
+    },
+    "settings": {
+        "message": "Settings"
+    },
+    "loadingDrafts": {
+        "message": "Loading drafts..."
+    },
+    "strictLineBreaksHelpFull": {
+        "message": "Only affects preview here. Match Obsidian's setting for consistency."
+    },
+    "defaultTemplate": {
+        "message": "Default"
+    },
+    "setAsDefault": {
+        "message": "Set as Default"
+    },
+    "templateQuickNote": {
+        "message": "Quick Note"
+    },
+    "templateBookmark": {
+        "message": "Bookmark"
+    },
+    "templateQuote": {
+        "message": "Quote"
+    },
+    "templateIdea": {
+        "message": "Idea"
+    },
+    "templateReading": {
+        "message": "Reading Note"
+    },
+    "whySaved": {
+        "message": "Why saved:"
+    },
+    "myThoughts": {
+        "message": "My thoughts:"
+    },
+    "theIdea": {
+        "message": "The idea:"
+    },
+    "nextSteps": {
+        "message": "Next steps:"
+    },
+    "keyPoints": {
+        "message": "Key Points"
+    },
+    "quotes": {
+        "message": "Quotes"
+    },
+    "mySummary": {
+        "message": "My Summary"
+    },
+    "actionItems": {
+        "message": "Action Items"
+    },
+    "trigger": {
+        "message": "Trigger:"
+    },
+    "escToExit": {
+        "message": "Press ESC to exit"
+    },
+    "autoSyncSection": {
+        "message": "Auto Sync"
+    },
+    "autoSyncEnabled": {
+        "message": "Enable Auto Sync"
+    },
+    "autoSyncInterval": {
+        "message": "Sync every $MINUTES$ minutes",
+        "placeholders": {
+            "minutes": {
+                "content": "$1"
+            }
+        }
+    },
+    "autoSyncHelp": {
+        "message": "Automatically sync drafts to Obsidian"
+    },
+    "deleteDraft": {
+        "message": "Delete"
+    },
+    "confirmDelete": {
+        "message": "Confirm?"
+    }
+}
