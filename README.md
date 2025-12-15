@@ -9,7 +9,12 @@
 [English](#english) | [简体中文](#简体中文) | [日本語](#日本語)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](package.json)
+
+### 🔥 What's New in v2.1.0
+- **Duplicate Prevention**: Improved sync logic with Unique ID (UUID) and smart file checking to prevent duplicate notes.
+- **Better UX**: Title input auto-focuses on open.
+- **Robustness**: Improved network error handling during sync.
 
 </div>
 

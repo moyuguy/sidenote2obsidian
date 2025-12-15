@@ -1,5 +1,22 @@
 import type { Card, CardFrontmatter } from "~types"
 
+// Helper for fetch with timeout
+const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 5000) => {
+    const controller = new AbortController()
+    const id = setTimeout(() => controller.abort(), timeout)
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        })
+        clearTimeout(id)
+        return response
+    } catch (error) {
+        clearTimeout(id)
+        throw error
+    }
+}
+
 // Check if Obsidian is running and API is accessible
 export const checkObsidianStatus = async (
     apiKey: string,
@@ -7,17 +24,17 @@ export const checkObsidianStatus = async (
 ): Promise<boolean> => {
     if (!apiKey || !apiUrl) return false
     try {
-        const response = await fetch(apiUrl, {
+        const response = await fetchWithTimeout(apiUrl, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${apiKey}`,
                 "Content-Type": "application/json"
             }
-        })
+        }, 2000) // Short timeout for check
         const data = await response.json()
         return data.status === "OK" || data.authenticated === true
     } catch (error) {
-        console.error("Obsidian check failed:", error)
+        // console.error("Obsidian check failed:", error)
         return false
     }
 }
@@ -53,9 +70,48 @@ export const parseFrontmatter = (content: string): { frontmatter: CardFrontmatte
             source_url: frontmatter.source_url || "",
             source_title: frontmatter.source_title || "",
             created: frontmatter.created || "",
-            template: frontmatter.template
+            template: frontmatter.template,
+            uuid: frontmatter.uuid
         },
         body
+    }
+}
+
+// Search for card by UUID
+export const searchCardByUuid = async (
+    apiKey: string,
+    apiUrl: string,
+    uuid: string
+): Promise<Card | null> => {
+    try {
+        const response = await fetchWithTimeout(`${apiUrl}/search/simple/`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                query: `uuid: "${uuid}"`,
+                contextLength: 0
+            })
+        })
+
+        if (!response.ok) return null
+
+        const results = await response.json()
+        if (results.length === 0) return null
+
+        // Get the first result
+        return await getCardByPath(apiKey, apiUrl, results[0].filename)
+    } catch (error) {
+        // Ignore AbortError (timeout) or other expected errors during search
+        if (error instanceof DOMException && error.name === "AbortError") {
+            console.debug("Search by UUID timed out (expected for new notes sometimes)", error)
+        } else {
+            // Use warm instead of error to avoid alarming the user in the console
+            console.warn("Search by UUID failed:", error)
+        }
+        return null
     }
 }
 
@@ -67,7 +123,7 @@ export const searchCardsByUrl = async (
 ): Promise<Card[]> => {
     try {
         // Use the search endpoint to find notes with matching source_url
-        const response = await fetch(`${apiUrl}/search/simple/`, {
+        const response = await fetchWithTimeout(`${apiUrl}/search/simple/`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${apiKey}`,
@@ -109,7 +165,7 @@ export const getCardByPath = async (
     path: string
 ): Promise<Card | null> => {
     try {
-        const response = await fetch(`${apiUrl}/vault/${encodeURIComponent(path)}`, {
+        const response = await fetchWithTimeout(`${apiUrl}/vault/${encodeURIComponent(path)}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${apiKey}`,
@@ -155,7 +211,7 @@ export const createCard = async (
     const fullPath = cleanPath ? `${cleanPath}/${filename}` : filename
 
     try {
-        const response = await fetch(`${apiUrl}/vault/${encodeURIComponent(fullPath)}`, {
+        const response = await fetchWithTimeout(`${apiUrl}/vault/${encodeURIComponent(fullPath)}`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${apiKey}`,
@@ -179,7 +235,7 @@ export const updateCard = async (
     content: string
 ): Promise<boolean> => {
     try {
-        const response = await fetch(`${apiUrl}/vault/${encodeURIComponent(path)}`, {
+        const response = await fetchWithTimeout(`${apiUrl}/vault/${encodeURIComponent(path)}`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${apiKey}`,
@@ -202,7 +258,7 @@ export const deleteCard = async (
     path: string
 ): Promise<boolean> => {
     try {
-        const response = await fetch(`${apiUrl}/vault/${encodeURIComponent(path)}`, {
+        const response = await fetchWithTimeout(`${apiUrl}/vault/${encodeURIComponent(path)}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${apiKey}`
@@ -243,11 +299,13 @@ export const generateFilename = (
 export const generateContent = (
     template: string,
     sourceUrl: string,
-    sourceTitle: string
+    sourceTitle: string,
+    uuid?: string
 ): string => {
     const now = new Date().toISOString()
 
     return template
+        .replace(/\{\{uuid\}\}/g, uuid || "")
         .replace(/\{\{source_url\}\}/g, sourceUrl)
         .replace(/\{\{source_title\}\}/g, sourceTitle)
         .replace(/\{\{created\}\}/g, now)
@@ -270,13 +328,14 @@ export const getVaultFolders = async (apiKey: string, apiUrl: string): Promise<s
             const endpoint = currentDir === "/" ? "/vault/" : `/vault/${currentDir}`
 
             count++
-            const response = await fetch(`${apiUrl}${endpoint}`, {
+            // Using a shorter timeout for folder scanning to fail fast on stuck folders
+            const response = await fetchWithTimeout(`${apiUrl}${endpoint}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${apiKey}`,
                     "Accept": "application/json"
                 }
-            })
+            }, 3000)
 
             if (!response.ok) continue
 

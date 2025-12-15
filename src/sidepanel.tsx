@@ -7,7 +7,7 @@ import "./style.css"
 import { SettingsView } from "~components/SettingsView"
 import { CardList } from "~components/CardList"
 import { CardEditor } from "~components/CardEditor"
-import { checkObsidianStatus, createCard, generateFilename, generateContent, openObsidian } from "~utils/obsidian"
+import { checkObsidianStatus, createCard, updateCard, searchCardByUuid, generateFilename, generateContent, openObsidian } from "~utils/obsidian"
 import { checkShortcut } from "~utils/keyboard"
 import type { LocalCard, Template } from "~types"
 import { DEFAULT_TEMPLATES, DEFAULT_SETTINGS } from "~types"
@@ -125,11 +125,80 @@ function IndexSidePanel() {
 
   const performUpload = async (card: LocalCard): Promise<boolean> => {
     try {
+      let targetPath = null
+      
+      // 1. Try to use stored path if valid
+      if (card.obsidianPath && card.obsidianPath !== "synced") {
+          // Verify it exists? Or just try?
+          // Let's verify briefly or just let update fail? 
+          // If we want to be safe, we rely on search/check.
+          // But let's check if it's potentially valid.
+          targetPath = card.obsidianPath
+      }
+
+      // 2. If no path, Search by UUID
+      if (!targetPath) {
+          try {
+              const existingCard = await searchCardByUuid(apiKey, apiUrl, card.id)
+              if (existingCard) {
+                  console.log("Found existing note by UUID:", existingCard.path)
+                  targetPath = existingCard.path
+              }
+          } catch (e) {
+              console.warn("Search by UUID failed", e)
+          }
+      }
+
+      // 3. If still no path (UUID search failed or new), check filename collision
       const template = templates.find(t => t.id === card.templateId) || templates[0]
       const filename = generateFilename(template.filenamePattern, card.title, card.sourceTitle)
       
-      // Content already includes the full template (frontmatter + body) from the editor
-      const success = await createCard(apiKey, apiUrl, savePath, filename, card.content)
+      if (!targetPath) {
+          // Check if file exists at the generated filename location
+          try {
+              // We need full path checking
+              const checkPath = savePath ? `${savePath.replace(/\/$/, "")}/${filename}` : filename
+              const exists = await checkObsidianStatus(apiKey, `${apiUrl}/vault/${encodeURIComponent(checkPath)}`) 
+              // Wait, checkObsidianStatus checks "/" usually. We need a specific file check.
+              // We can use getCardByPath but it fetches content. 
+              // Sending a HEAD request would be better but our utils don't expose it easily.
+              // Let's just try to GET it.
+              
+              const response = await fetch(`${apiUrl}/vault/${encodeURIComponent(checkPath)}`, {
+                    method: "HEAD",
+                    headers: { Authorization: `Bearer ${apiKey}` }
+              })
+              
+              if (response.ok) {
+                  console.log("File exists at target filename, will update (overwrite):", checkPath)
+                  targetPath = checkPath
+              }
+          } catch (e) {
+              // Ignore check errors
+          }
+      }
+      
+      let success = false
+      let usedPath = ""
+
+      if (targetPath) {
+          // Update (PUT) - Overwrite
+          success = await updateCard(apiKey, apiUrl, targetPath, card.content)
+          usedPath = targetPath
+      } else {
+          // Create (POST)
+          success = await createCard(apiKey, apiUrl, savePath, filename, card.content)
+          usedPath = savePath ? `${savePath.replace(/\/$/, "")}/${filename}` : filename
+      }
+      
+      // Update local card with the path we used on success
+      if (success) {
+           setLocalCards(prev => (prev || []).map(c => 
+            c.id === card.id 
+              ? { ...c, status: "synced", obsidianPath: usedPath } 
+              : c
+          ))
+      }
       
       return success
     } catch (error) {
@@ -151,7 +220,7 @@ function IndexSidePanel() {
     if (success) {
       setLocalCards(prev => (prev || []).map(c => 
         c.id === card.id 
-          ? { ...c, status: "synced", obsidianPath: "synced" } 
+          ? { ...c, status: "synced", obsidianPath: "synced" } // We could store actual path but we don't return it from createCard easily yet
           : c
       ))
     } else {

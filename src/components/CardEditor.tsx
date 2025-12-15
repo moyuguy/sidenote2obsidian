@@ -25,6 +25,10 @@ export const CardEditor = ({ card, sourceUrl, sourceTitle, onSave, onCancel }: C
   const [strictLineBreaks] = useStorage("strictLineBreaks", DEFAULT_SETTINGS.strictLineBreaks)
   const [defaultTemplateId] = useStorage("defaultTemplateId", DEFAULT_SETTINGS.defaultTemplateId)
   
+  // Move ID generation to state initialization so we have it for templates
+  const [tempId] = useState(() => crypto.randomUUID())
+  const cardId = card?.id || tempId
+  
   const isNewCard = !card
   
   // Helper to generate full content from template with variable substitution
@@ -33,11 +37,22 @@ export const CardEditor = ({ card, sourceUrl, sourceTitle, onSave, onCancel }: C
     if (!tmpl) return ""
     const now = new Date().toISOString()
     const date = now.split("T")[0]
-    return tmpl.contentTemplate
+    let newContent = tmpl.contentTemplate
+      // Use the stable cardId we generated
+      .replace(/\{\{uuid\}\}/g, cardId)
       .replace(/\{\{source_url\}\}/g, sourceUrl)
       .replace(/\{\{source_title\}\}/g, sourceTitle)
       .replace(/\{\{created\}\}/g, now)
       .replace(/\{\{date\}\}/g, date)
+      
+    // Fallback: If template didn't have {{uuid}} and replacement didn't happen,
+    // we should try to inject it into the frontmatter.
+    if (!newContent.includes(cardId) && newContent.startsWith("---")) {
+        // Simple injection after the first ---
+        newContent = newContent.replace(/^---\n/, `---\nuuid: "${cardId}"\n`)
+    }
+    
+    return newContent
   }
   
   const [content, setContent] = useState(card?.content || "")
@@ -95,11 +110,35 @@ export const CardEditor = ({ card, sourceUrl, sourceTitle, onSave, onCancel }: C
   }, [templates, isNewCard, hasInitialized, selectedTemplateId])
 
   // Initial focus
+  // Initial focus
   useEffect(() => {
-    if (isNewCard) {
-      setTimeout(() => titleInputRef.current?.focus(), 100)
-    } else {
-      setTimeout(() => contentInputRef.current?.focus(), 100)
+    const focusTitle = () => {
+        if (titleInputRef.current) {
+            titleInputRef.current.focus()
+        }
+    }
+
+    // Attempt immediately
+    if (isNewCard) focusTitle()
+
+    // Attempt after delay
+    const timeoutId = setTimeout(() => {
+        if (isNewCard) {
+          focusTitle()
+        } else {
+          contentInputRef.current?.focus()
+        }
+    }, 100) // Reduced delay, but double attempt
+    
+    // Also listen for window focus (common for popup opening)
+    const handleWindowFocus = () => {
+        if (isNewCard) setTimeout(focusTitle, 50)
+    }
+    window.addEventListener("focus", handleWindowFocus)
+
+    return () => {
+        clearTimeout(timeoutId)
+        window.removeEventListener("focus", handleWindowFocus)
     }
   }, [isNewCard])
 
@@ -127,9 +166,9 @@ export const CardEditor = ({ card, sourceUrl, sourceTitle, onSave, onCancel }: C
     try {
       const now = new Date().toISOString()
       
-      if (isNewCard) {
+        if (isNewCard) {
         const newCard: LocalCard = {
-          id: crypto.randomUUID(),
+          id: cardId, // Use the same ID that was put in the content
           title,
           content,
           templateId: selectedTemplateId,
@@ -257,6 +296,7 @@ export const CardEditor = ({ card, sourceUrl, sourceTitle, onSave, onCancel }: C
           <input
             ref={titleInputRef}
             type="text"
+            autoFocus={true}
             value={title}
             onChange={e => setTitle(e.target.value)}
             placeholder={t("editorTitlePlaceholder")}

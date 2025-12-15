@@ -55,6 +55,7 @@ export interface CardFrontmatter {
     source_title: string
     created: string
     template?: string
+    uuid?: string
 }
 
 // Default templates for web browsing note capture
@@ -64,6 +65,7 @@ export const DEFAULT_TEMPLATES: Template[] = [
         name: "Quick Note",
         filenamePattern: "{{title}}",
         contentTemplate: `---
+uuid: "{{uuid}}"
 source_url: "{{source_url}}"
 source_title: "{{source_title}}"
 created: "{{created}}"
@@ -77,6 +79,7 @@ type: note
         name: "Bookmark",
         filenamePattern: "{{date}} - {{title}}",
         contentTemplate: `---
+uuid: "{{uuid}}"
 source_url: "{{source_url}}"
 source_title: "{{source_title}}"
 created: "{{created}}"
@@ -96,6 +99,7 @@ type: bookmark
         name: "Quote",
         filenamePattern: "Quote - {{title}}",
         contentTemplate: `---
+uuid: "{{uuid}}"
 source_url: "{{source_url}}"
 source_title: "{{source_title}}"
 created: "{{created}}"
@@ -114,6 +118,7 @@ type: quote
         name: "Idea",
         filenamePattern: "Idea - {{date}}",
         contentTemplate: `---
+uuid: "{{uuid}}"
 source_url: "{{source_url}}"
 source_title: "{{source_title}}"
 created: "{{created}}"
@@ -137,6 +142,7 @@ type: idea
         name: "Reading Note",
         filenamePattern: "Reading - {{title}}",
         contentTemplate: `---
+uuid: "{{uuid}}"
 source_url: "{{source_url}}"
 source_title: "{{source_title}}"
 created: "{{created}}"
