@@ -178,15 +178,18 @@ export const CardEditor = ({ card, sourceUrl, sourceTitle, onSave, onCancel }: C
           created: now,
           updated: now
         }
-        setLocalCards([newCard, ...localCards])
+        await setLocalCards([newCard, ...localCards])
       } else {
         const updatedCards = localCards.map(c => 
           c.id === card.id 
             ? { ...c, title, content, updated: now, templateId: selectedTemplateId, status: "draft" as const } 
             : c
         )
-        setLocalCards(updatedCards)
+        await setLocalCards(updatedCards)
       }
+      
+      // Add a small delay to ensure storage write completion
+      await new Promise(resolve => setTimeout(resolve, 100))
       
       onSave?.()
     } finally {

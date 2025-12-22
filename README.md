@@ -9,9 +9,12 @@
 [English](#english) | [简体中文](#简体中文) | [日本語](#日本語)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](package.json)
 
-### 🔥 What's New in v2.1.0
+### 🔥 What's New in v2.2.0
+- **Improved Save UX**: New Toast notifications confirm when a note is successfully saved to local storage.
+- **Disconnected Insights**: The disconnected page now shows a count of unsynced drafts and a "View Drafts" button.
+- **Critical Fix**: Resolved a serious bug where notes could be lost when saving while Obsidian was closed.
 - **Duplicate Prevention**: Improved sync logic with Unique ID (UUID) and smart file checking to prevent duplicate notes.
 - **Better UX**: Title input auto-focuses on open.
 - **Robustness**: Improved network error handling during sync.

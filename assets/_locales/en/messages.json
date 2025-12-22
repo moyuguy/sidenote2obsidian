@@ -251,5 +251,8 @@
     },
     "confirmDelete": {
         "message": "Confirm?"
+    },
+    "noteSavedLocal": {
+        "message": "Note saved locally, will sync when connected"
     }
 }

@@ -7,6 +7,7 @@ import "./style.css"
 import { SettingsView } from "~components/SettingsView"
 import { CardList } from "~components/CardList"
 import { CardEditor } from "~components/CardEditor"
+import { ToastProvider, useToast } from "~components/Toast"
 import { checkObsidianStatus, createCard, updateCard, searchCardByUuid, generateFilename, generateContent, openObsidian } from "~utils/obsidian"
 import { checkShortcut } from "~utils/keyboard"
 import type { LocalCard, Template } from "~types"
@@ -15,8 +16,9 @@ import { useI18n } from "~hooks/useI18n"
 
 type View = "main" | "settings" | "editor"
 
-function IndexSidePanel() {
+function IndexSidePanelContent() {
   const { t } = useI18n()
+  const { showToast } = useToast()
   const [view, setView] = useState<View>("editor")
   
   // Storage
@@ -38,6 +40,7 @@ function IndexSidePanel() {
   const [isUploadingMap, setIsUploadingMap] = useState<Record<string, boolean>>({})
   const [isUploadingAll, setIsUploadingAll] = useState(false)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [viewingDrafts, setViewingDrafts] = useState(false) // Track if user is viewing drafts while disconnected
 
   // Check if first time (no API key)
   const isFirstTime = !apiKey
@@ -83,12 +86,17 @@ function IndexSidePanel() {
       const isConnected = await checkObsidianStatus(apiKey, apiUrl)
       setStatus(isConnected ? "connected" : "disconnected")
       setInitialCheckDone(true)
+      
+      // Reset viewingDrafts when connection is restored
+      if (isConnected && viewingDrafts) {
+        setViewingDrafts(false)
+      }
     }
     
     check()
     const interval = setInterval(check, 5000) // Check more frequently (5s)
     return () => clearInterval(interval)
-  }, [apiKey, apiUrl])
+  }, [apiKey, apiUrl, viewingDrafts])
 
   // Filter cards for current URL
   const currentCards = localCards.filter(c => c.sourceUrl === currentUrl || !c.sourceUrl)
@@ -106,6 +114,10 @@ function IndexSidePanel() {
 
   const handleEditorSave = () => {
     setView("main")
+    // Show toast notification when saving while disconnected
+    if (status === "disconnected") {
+      showToast("success", t("noteSavedLocal") || "Note saved locally, will sync when connected")
+    }
   }
 
   const handleEditorCancel = () => {
@@ -346,12 +358,14 @@ function IndexSidePanel() {
     )
   }
 
-  // Disconnected View (Overlay)
-  if (status === "disconnected") {
+  // Disconnected View (Overlay) - only show if not viewing drafts
+  if (status === "disconnected" && !viewingDrafts) {
+     const draftCount = localCards.filter(c => c.status === "draft").length
+     
      return (
        <div className="h-screen w-full bg-gray-50 dark:bg-gray-900 flex flex-col">
-          {/* Header (Simplified) */}
-          <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 opacity-60 pointer-events-none">
+          {/* Header */}
+          <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
              <h1 className="text-lg font-bold text-violet-600 dark:text-violet-400">{t("appName")}</h1>
           </div>
           
@@ -362,20 +376,41 @@ function IndexSidePanel() {
              
              <div className="space-y-2">
                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t("statusDisconnected")}</h2>
-               <p className="text-sm text-gray-500 dark:text-gray-400 max-w-[200px] mx-auto">
-                 {t("connectFirst") || "Please open Obsidian to continue syncing your notes."}
+               <p className="text-sm text-gray-500 dark:text-gray-400 max-w-[240px]">
+                 {t("connectFirst") || "Please open Obsidian to sync your notes."}
                </p>
+               
+               {/* Draft count indicator */}
+               {draftCount > 0 && (
+                 <div className="mt-3 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                   <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">
+                     {draftCount} {draftCount === 1 ? "note" : "notes"} waiting to sync
+                   </p>
+                 </div>
+               )}
              </div>
 
-             <div className="space-y-3 w-full max-w-[200px]">
+             <div className="space-y-3 w-full max-w-[240px]">
                <button 
                  onClick={openObsidian}
                  className="w-full flex items-center justify-center gap-2 bg-violet-600 dark:bg-violet-700 text-white py-2.5 rounded-lg hover:bg-violet-700 dark:hover:bg-violet-600 transition-colors font-medium text-sm"
                >
-                 {/* Use chrome.runtime.getURL for assets in extension */}
                  <img src={chrome.runtime.getURL("assets/icon-32.png")} className="w-4 h-4 invert opacity-90" alt="" />
                  Open Obsidian
                </button>
+               
+               {/* View Drafts button - only show if there are drafts */}
+               {draftCount > 0 && (
+                 <button
+                   onClick={() => {
+                     setViewingDrafts(true)
+                     setView("main")
+                   }}
+                   className="w-full py-2 text-sm text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg transition-colors font-medium border border-violet-200 dark:border-violet-800"
+                 >
+                   View Drafts ({draftCount})
+                 </button>
+               )}
                
                <button
                  onClick={() => setView("settings")}
@@ -393,6 +428,24 @@ function IndexSidePanel() {
   // Main view
   return (
     <div className="h-screen w-full bg-gray-50 dark:bg-gray-900 flex flex-col">
+      {/* Disconnected Banner - show when viewing drafts while disconnected */}
+      {status === "disconnected" && viewingDrafts && (
+        <div className="bg-amber-50 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertCircle size={16} className="text-amber-600 dark:text-amber-400" />
+            <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">
+              {t("statusDisconnected")} - {t("connectFirst")}
+            </span>
+          </div>
+          <button
+            onClick={openObsidian}
+            className="text-xs text-amber-700 dark:text-amber-300 hover:text-amber-900 dark:hover:text-amber-100 underline font-medium"
+          >
+            Open Obsidian
+          </button>
+        </div>
+      )}
+      
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <h1 className="text-lg font-bold text-violet-600 dark:text-violet-400">{t("appName")}</h1>
@@ -447,6 +500,14 @@ function IndexSidePanel() {
         confirmDeleteId={confirmDeleteId}
       />
     </div>
+  )
+}
+
+function IndexSidePanel() {
+  return (
+    <ToastProvider>
+      <IndexSidePanelContent />
+    </ToastProvider>
   )
 }
 

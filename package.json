@@ -1,7 +1,7 @@
 {
     "name": "sidenote2obsidian-plasmo",
     "displayName": "Sidenote2Obsidian",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "Quickly record ideas to Obsidian from Chrome Side Panel",
     "author": "Antigravity",
     "scripts": {

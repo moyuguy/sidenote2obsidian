@@ -251,5 +251,8 @@
     },
     "confirmDelete": {
         "message": "确认？"
+    },
+    "noteSavedLocal": {
+        "message": "笔记已保存到本地，连接后将同步"
     }
 }
